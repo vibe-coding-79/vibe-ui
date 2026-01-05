@@ -23,3 +23,65 @@
 body {
     font-family: var(--font-display);
 }
+
+/* CKEditor Custom Styles */
+.ck-editor__editable_inline {
+    min-height: 500px !important;
+}
+
+.ck.ck-editor__main>.ck-editor__editable:not(.ck-focused) {
+    border-color: transparent !important;
+}
+
+.ck.ck-editor__main>.ck-editor__editable.ck-focused {
+    border-color: transparent !important;
+    box-shadow: none !important;
+}
+
+.ck.ck-toolbar {
+    border: none !important;
+    background: transparent !important;
+}
+
+.ck.ck-editor__top {
+    border-bottom: 1px solid #e2e8f0 !important;
+}
+
+.dark .ck.ck-editor__top {
+    border-bottom: 1px solid #1e293b !important;
+}
+
+.dark .ck.ck-toolbar {
+    background-color: #1a2633 !important;
+}
+
+.dark .ck-editor__editable {
+    background-color: transparent !important;
+    color: #cbd5e1 !important;
+}
+
+.dark .ck.ck-button {
+    color: #cbd5e1 !important;
+}
+
+.dark .ck.ck-button:hover {
+    background: #334155 !important;
+}
+
+.dark .ck.ck-button.ck-on {
+    background: #1e293b !important;
+    color: white !important;
+}
+
+.dark .ck.ck-dropdown__panel {
+    background: #1e293b !important;
+    border-color: #334155 !important;
+}
+
+.dark .ck.ck-list {
+    background: #1e293b !important;
+}
+
+.dark .ck.ck-list__item .ck-button:hover:not(.ck-disabled) {
+    background: #334155 !important;
+}
