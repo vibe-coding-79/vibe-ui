@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import { MdSearch } from 'react-icons/md';
 
 const Header: React.FC = () => {
@@ -6,19 +7,19 @@ const Header: React.FC = () => {
         <header className="sticky top-0 z-50 w-full bg-white dark:bg-[#1a2634] border-b border-[#e7edf3] dark:border-slate-700">
             <div className="px-4 md:px-10 lg:px-40 py-3 flex items-center justify-between gap-4">
                 <div className="flex items-center gap-8">
-                    <a className="flex items-center gap-4 text-[#0d141b] dark:text-white" href="#">
+                    <Link className="flex items-center gap-4 text-[#0d141b] dark:text-white" to="/">
                         <div className="size-8 text-primary">
                             <svg className="w-full h-full" fill="none" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
                                 <path d="M42.4379 44C42.4379 44 36.0744 33.9038 41.1692 24C46.8624 12.9336 42.2078 4 42.2078 4L7.01134 4C7.01134 4 11.6577 12.932 5.96912 23.9969C0.876273 33.9029 7.27094 44 7.27094 44L42.4379 44Z" fill="currentColor"></path>
                             </svg>
                         </div>
                         <h2 className="text-lg font-bold leading-tight tracking-[-0.015em] hidden sm:block">Blog Brand</h2>
-                    </a>
+                    </Link>
                     <nav className="hidden md:flex items-center gap-6 lg:gap-9">
-                        <a className="text-sm font-medium leading-normal hover:text-primary transition-colors text-slate-900 dark:text-slate-100" href="#">Home</a>
-                        <a className="text-sm font-medium leading-normal hover:text-primary transition-colors text-slate-500 dark:text-slate-400" href="#">Tech</a>
-                        <a className="text-sm font-medium leading-normal hover:text-primary transition-colors text-slate-500 dark:text-slate-400" href="#">Lifestyle</a>
-                        <a className="text-sm font-medium leading-normal hover:text-primary transition-colors text-slate-500 dark:text-slate-400" href="#">Business</a>
+                        <Link className="text-sm font-medium leading-normal hover:text-primary transition-colors text-slate-900 dark:text-slate-100" to="/">Home</Link>
+                        <Link className="text-sm font-medium leading-normal hover:text-primary transition-colors text-slate-500 dark:text-slate-400" to="/category/tech">Tech</Link>
+                        <Link className="text-sm font-medium leading-normal hover:text-primary transition-colors text-slate-500 dark:text-slate-400" to="/category/lifestyle">Lifestyle</Link>
+                        <Link className="text-sm font-medium leading-normal hover:text-primary transition-colors text-slate-500 dark:text-slate-400" to="/category/business">Business</Link>
                     </nav>
                 </div>
                 <div className="flex flex-1 justify-end items-center gap-4 md:gap-8">

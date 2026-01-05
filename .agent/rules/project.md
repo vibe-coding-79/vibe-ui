@@ -1,3 +1,7 @@
+---
+trigger: always_on
+---
+
 # React + Vite + TypeScript Project Setup Guide (Best Practices 2025)
 
 This document provides a detailed guide for setting up a modern React project using **Vite** and **TypeScript**. It adheres to **Clean Architecture** principles and **Best Practices** for folder structure and **Clean Code**, ensuring scalability and maintainability for large-scale applications [1] [2].

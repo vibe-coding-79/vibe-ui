@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import { MdEmail, MdTrendingUp } from 'react-icons/md';
 
 const trendingPosts = [
@@ -43,13 +44,13 @@ const Sidebar: React.FC = () => {
                 <div className="flex flex-col gap-5">
                     {trendingPosts.map((post, index) => (
                         <React.Fragment key={post.id}>
-                            <a className="group flex gap-4 items-start" href="#">
+                            <Link to={`/post/${post.title.toLowerCase().replace(/ /g, '-')}`} className="group flex gap-4 items-start">
                                 <span className="text-3xl font-black text-slate-200 dark:text-slate-700 leading-none group-hover:text-primary transition-colors">{post.id}</span>
                                 <div>
                                     <h4 className="text-sm font-semibold text-slate-900 dark:text-white group-hover:text-primary transition-colors line-clamp-2">{post.title}</h4>
                                     <span className="text-xs text-slate-500 mt-1 block">{post.info}</span>
                                 </div>
-                            </a>
+                            </Link>
                             {index < trendingPosts.length - 1 && <div className="h-px bg-slate-100 dark:bg-slate-700 w-full"></div>}
                         </React.Fragment>
                     ))}
@@ -61,13 +62,13 @@ const Sidebar: React.FC = () => {
                 <h3 className="text-base font-bold text-slate-900 dark:text-white mb-4">Popular Topics</h3>
                 <div className="flex flex-wrap gap-2">
                     {tags.map((tag) => (
-                        <a
+                        <Link
                             key={tag}
                             className="px-3 py-1.5 bg-white dark:bg-slate-700 text-slate-600 dark:text-slate-300 rounded text-xs font-medium border border-slate-200 dark:border-slate-600 hover:border-primary hover:text-primary dark:hover:text-primary transition-colors"
-                            href="#"
+                            to={`/category/${tag.toLowerCase()}`}
                         >
                             #{tag}
-                        </a>
+                        </Link>
                     ))}
                 </div>
             </div>

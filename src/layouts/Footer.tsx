@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import { MdPublic, MdAlternateEmail, MdRssFeed } from 'react-icons/md';
 
 const Footer: React.FC = () => {
@@ -48,7 +49,7 @@ const Footer: React.FC = () => {
                             <li><a className="hover:text-primary transition-colors" href="#">Help Center</a></li>
                             <li><a className="hover:text-primary transition-colors" href="#">Terms of Service</a></li>
                             <li><a className="hover:text-primary transition-colors" href="#">Privacy Policy</a></li>
-                            <li><a className="hover:text-primary transition-colors" href="#">Cookie Settings</a></li>
+                            <li><Link className="hover:text-primary transition-colors" to="/admin/login">Admin Login</Link></li>
                         </ul>
                     </div>
                 </div>

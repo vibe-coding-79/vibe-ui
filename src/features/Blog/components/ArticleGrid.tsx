@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 
 const articles = [
     {
@@ -54,25 +55,27 @@ const ArticleGrid: React.FC = () => {
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-10">
                 {articles.map((article, index) => (
-                    <article key={index} className="flex flex-col gap-3 group cursor-pointer">
-                        <div
-                            className="w-full bg-center bg-no-repeat aspect-[16/10] bg-cover rounded-lg overflow-hidden shadow-sm transition-all duration-300 group-hover:translate-y-[-4px] group-hover:shadow-md"
-                            style={{ backgroundImage: `url("${article.image}")` }}
-                        ></div>
-                        <div className="flex flex-col gap-1">
-                            <div className="flex items-center gap-2 mb-1">
-                                <span className="text-primary text-xs font-bold uppercase">{article.category}</span>
-                                <span className="text-slate-400 text-xs">•</span>
-                                <span className="text-slate-500 dark:text-slate-400 text-xs">{article.date}</span>
+                    <Link key={index} to={`/post/${article.title.toLowerCase().replace(/ /g, '-')}`} className="flex flex-col gap-3 group">
+                        <article className="flex flex-col gap-3">
+                            <div
+                                className="w-full bg-center bg-no-repeat aspect-[16/10] bg-cover rounded-lg overflow-hidden shadow-sm transition-all duration-300 group-hover:translate-y-[-4px] group-hover:shadow-md"
+                                style={{ backgroundImage: `url("${article.image}")` }}
+                            ></div>
+                            <div className="flex flex-col gap-1">
+                                <div className="flex items-center gap-2 mb-1">
+                                    <span className="text-primary text-xs font-bold uppercase">{article.category}</span>
+                                    <span className="text-slate-400 text-xs">•</span>
+                                    <span className="text-slate-500 dark:text-slate-400 text-xs">{article.date}</span>
+                                </div>
+                                <h3 className="text-[#0d141b] dark:text-white text-lg font-bold leading-tight group-hover:text-primary transition-colors">
+                                    {article.title}
+                                </h3>
+                                <p className="text-[#4c739a] dark:text-slate-400 text-sm font-normal leading-relaxed line-clamp-2">
+                                    {article.description}
+                                </p>
                             </div>
-                            <h3 className="text-[#0d141b] dark:text-white text-lg font-bold leading-tight group-hover:text-primary transition-colors">
-                                {article.title}
-                            </h3>
-                            <p className="text-[#4c739a] dark:text-slate-400 text-sm font-normal leading-relaxed line-clamp-2">
-                                {article.description}
-                            </p>
-                        </div>
-                    </article>
+                        </article>
+                    </Link>
                 ))}
             </div>
             <div className="mt-12 flex justify-center">

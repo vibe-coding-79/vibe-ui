@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import { MdArrowForward } from 'react-icons/md';
 
 const Hero: React.FC = () => {
@@ -17,9 +18,11 @@ const Hero: React.FC = () => {
                         <span className="text-slate-500 dark:text-slate-400 text-xs font-medium">Oct 24, 2023</span>
                     </div>
                     <div className="flex flex-col gap-3 text-left">
-                        <h1 className="text-[#0d141b] dark:text-white text-3xl md:text-4xl lg:text-5xl font-black leading-tight tracking-tight">
-                            The Future of AI in Design
-                        </h1>
+                        <Link to="/post/the-future-of-ai-in-design">
+                            <h1 className="text-[#0d141b] dark:text-white text-3xl md:text-4xl lg:text-5xl font-black leading-tight tracking-tight hover:text-primary transition-colors cursor-pointer">
+                                The Future of AI in Design
+                            </h1>
+                        </Link>
                         <p className="text-slate-600 dark:text-slate-300 text-base md:text-lg leading-relaxed">
                             How generative algorithms are changing the way we create and consume visual content, empowering designers to push boundaries.
                         </p>
@@ -36,9 +39,9 @@ const Hero: React.FC = () => {
                             </div>
                         </div>
                         <div className="flex-1"></div>
-                        <button className="flex items-center gap-2 text-primary font-bold text-sm hover:underline">
+                        <Link to="/post/the-future-of-ai-in-design" className="flex items-center gap-2 text-primary font-bold text-sm hover:underline">
                             Read Story <MdArrowForward size={18} />
-                        </button>
+                        </Link>
                     </div>
                 </div>
             </div>
