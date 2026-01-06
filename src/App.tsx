@@ -6,7 +6,7 @@ import AdminLoginPage from '@/pages/admin/AdminLoginPage';
 import AdminDashboardPage from '@/pages/admin/AdminDashboardPage';
 import AdminAddPostPage from '@/pages/admin/AdminAddPostPage';
 import { AuthProvider } from '@/features/Auth/context/AuthContext';
-import ProtectedRoute from '@/features/Auth/components/ProtectedRoute';
+// import ProtectedRoute from '@/features/Auth/components/ProtectedRoute';
 
 function App() {
   return (
