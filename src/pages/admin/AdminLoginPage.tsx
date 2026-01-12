@@ -1,27 +1,34 @@
-import React, { useState } from 'react';
-import { Link, useNavigate, useLocation } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
+import { useLogin } from '@/features/Auth/hooks/useLogin';
+import { getErrorMessage } from '@/utils/error-handler';
 import { useAuth } from '@/features/Auth/context/AuthContext';
 
 const AdminLoginPage: React.FC = () => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [error, setError] = useState<string | null>(null);
-    const { login, isLoading } = useAuth();
+    const loginMutation = useLogin();
+    const { isAuthenticated } = useAuth();
     const navigate = useNavigate();
-    const location = useLocation();
 
-    // Get the return URL from location state, or default to admin dashboard
-    const from = location.state?.from?.pathname || '/admin/dashboard';
+    useEffect(() => {
+        if (isAuthenticated) {
+            navigate('/admin/dashboard', { replace: true });
+        }
+    }, [isAuthenticated, navigate]);
 
-    const handleSubmit = async (e: React.FormEvent) => {
+    const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
         setError(null);
-        try {
-            await login(email, password);
-            navigate(from, { replace: true });
-        } catch (err: any) {
-            setError(err.message || 'Login failed. Please try again.');
-        }
+        loginMutation.mutate(
+            { email, password },
+            {
+                onError: (err) => {
+                    setError(getErrorMessage(err));
+                },
+            }
+        );
     };
 
     return (
@@ -115,9 +122,9 @@ const AdminLoginPage: React.FC = () => {
                         <button
                             className="flex w-full justify-center rounded-lg bg-primary px-3 py-3 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-primary/90 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary transition-all disabled:opacity-50 disabled:cursor-not-allowed items-center gap-2"
                             type="submit"
-                            disabled={isLoading}
+                            disabled={loginMutation.isPending}
                         >
-                            {isLoading ? (
+                            {loginMutation.isPending ? (
                                 <>
                                     <div className="animate-spin rounded-full h-4 w-4 border-2 border-white border-t-transparent"></div>
                                     Logging in...
