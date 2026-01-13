@@ -21,5 +21,5 @@ export interface LoginPayload {
 }
 
 export const authenticate = async (payload: LoginPayload): Promise<AuthResponse> => {
-    return api.post<AuthResponse>('/v1/authenticate', payload);
+    return api.post<AuthResponse>('/api/v1/authenticate', payload);
 };

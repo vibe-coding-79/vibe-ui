@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Add New Role | BlogAdmin RBAC</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#136986",
+                        "background-light": "#ffffff",
+                        "background-dark": "#17191c",
+                    },
+                    fontFamily: {
+                        "display": ["Inter"]
+                    },
+                    borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<style type="text/tailwindcss">
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: #d1e1e6; border-radius: 10px; }
+        .dark ::-webkit-scrollbar-thumb { background: #334155; }
+    </style>
+</head>
+<body class="bg-slate-50 dark:bg-background-dark font-display text-slate-900 dark:text-slate-100 antialiased">
+<div class="flex min-h-screen overflow-hidden">
+<aside class="w-64 border-r border-slate-200 dark:border-slate-800 bg-background-light dark:bg-background-dark flex flex-col shrink-0">
+<div class="p-6 flex flex-col h-full">
+<div class="flex items-center gap-3 mb-10">
+<div class="bg-primary size-10 rounded-lg flex items-center justify-center text-white">
+<span class="material-symbols-outlined">shield_person</span>
+</div>
+<div class="flex flex-col">
+<h1 class="text-[#0e171b] dark:text-white text-base font-bold leading-none">BlogAdmin</h1>
+<p class="text-primary text-[10px] font-bold tracking-widest uppercase mt-1">RBAC System</p>
+</div>
+</div>
+<nav class="flex flex-col gap-1 grow">
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg bg-primary/10 text-primary font-semibold transition-colors" href="#">
+<span class="material-symbols-outlined">verified_user</span>
+<span class="text-sm">Roles</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 font-medium transition-colors" href="#">
+<span class="material-symbols-outlined">key</span>
+<span class="text-sm">Permissions</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 font-medium transition-colors" href="#">
+<span class="material-symbols-outlined">group_add</span>
+<span class="text-sm">User Assignments</span>
+</a>
+<div class="my-4 border-t border-slate-100 dark:border-slate-800"></div>
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-500 dark:text-slate-500 hover:text-primary transition-colors mt-auto" href="#">
+<span class="material-symbols-outlined">arrow_back</span>
+<span class="text-sm">Back to Blog</span>
+</a>
+</nav>
+<div class="mt-6 pt-6 border-t border-slate-100 dark:border-slate-800 flex items-center gap-3">
+<div class="bg-center bg-no-repeat aspect-square bg-cover rounded-full size-8 border border-slate-200" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuAGhnziwjRx_XRW-Zou5K0HsMraUKoFvdonu_1J4R_O9-Sf3EdwcK7_dCnnIG6_AJ4xvx_pB3OqRfAtdGuzL2wLmfk6cXrxw8iCvtgTJFHyapeSSnGY3FP3CNQe5pnkmJzsTQvE8lBi429v6Ln90t2OPKPsj3s-XU8zoF8dEgMcNJlQ-1XTT__X4dxcZet-lG2JRTwSPqHh-6lQas-riSPtlyPWnrKrjQZCaHHDSh9kkXrfRyLlhu2kh_q5Xdo6dDBWbpq1Hy_Lug");'></div>
+<div class="flex flex-col">
+<p class="text-xs font-bold truncate">Admin User</p>
+<p class="text-[10px] text-slate-500 uppercase tracking-tighter leading-none">Super User</p>
+</div>
+</div>
+</div>
+</aside>
+<main class="flex-1 flex flex-col overflow-y-auto">
+<header class="p-8 pb-4">
+<div class="flex items-center gap-2 text-xs font-bold text-slate-400 uppercase tracking-widest mb-4">
+<a class="hover:text-primary transition-colors" href="#">Roles</a>
+<span class="material-symbols-outlined !text-[14px]">chevron_right</span>
+<span class="text-slate-600 dark:text-slate-300">Add New Role</span>
+</div>
+<div class="flex flex-wrap justify-between items-end gap-4">
+<div class="flex flex-col gap-1">
+<h2 class="text-slate-900 dark:text-white text-3xl font-black leading-tight tracking-tight">Add New Role</h2>
+<p class="text-slate-500 dark:text-slate-400 text-sm max-w-xl">Define a new identity and configure its granular permission set within the system.</p>
+</div>
+<div class="flex gap-3">
+<button class="px-5 py-2.5 border border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-300 text-sm font-bold rounded-lg hover:bg-slate-50 dark:hover:bg-slate-800 transition-all">
+                        Cancel
+                    </button>
+<button class="flex items-center gap-2 px-5 py-2.5 bg-primary text-white text-sm font-bold rounded-lg shadow-lg shadow-primary/20 hover:brightness-110 transition-all">
+<span class="material-symbols-outlined !text-[18px]">save</span>
+<span>Save Role</span>
+</button>
+</div>
+</div>
+</header>
+<form class="px-8 py-4 space-y-8 pb-20">
+<section class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl overflow-hidden shadow-sm">
+<div class="p-6 border-b border-slate-100 dark:border-slate-800">
+<h3 class="text-base font-bold text-slate-900 dark:text-white flex items-center gap-2">
+<span class="material-symbols-outlined text-primary">info</span>
+                        Role Information
+                    </h3>
+</div>
+<div class="p-8 grid grid-cols-1 md:grid-cols-2 gap-8">
+<div class="space-y-2">
+<label class="block text-xs font-black text-slate-500 uppercase tracking-widest">Role Name</label>
+<input class="w-full px-4 py-2.5 bg-slate-50 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-700 rounded-lg text-sm focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition-all" placeholder="e.g. Marketing Manager" type="text"/>
+<p class="text-[11px] text-slate-400">The public display name for this role.</p>
+</div>
+<div class="space-y-2">
+<label class="block text-xs font-black text-slate-500 uppercase tracking-widest">Description</label>
+<input class="w-full px-4 py-2.5 bg-slate-50 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-700 rounded-lg text-sm focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition-all" placeholder="e.g. Can manage blog posts and view analytics" type="text"/>
+<p class="text-[11px] text-slate-400">Brief summary of the role's purpose.</p>
+</div>
+</div>
+</section>
+<section class="space-y-6">
+<div class="flex items-center justify-between">
+<div>
+<h3 class="text-lg font-black text-slate-900 dark:text-white">Select Permissions</h3>
+<p class="text-sm text-slate-500">Toggle specific capabilities for this role grouped by resource.</p>
+</div>
+<div class="flex gap-2">
+<button class="text-xs font-bold text-primary hover:underline" type="button">Select All</button>
+<span class="text-slate-300">|</span>
+<button class="text-xs font-bold text-slate-400 hover:text-slate-600" type="button">Deselect All</button>
+</div>
+</div>
+<div class="grid grid-cols-1 gap-6">
+<div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl overflow-hidden shadow-sm">
+<div class="px-6 py-4 bg-slate-50 dark:bg-slate-800/50 border-b border-slate-100 dark:border-slate-800 flex items-center gap-3">
+<span class="material-symbols-outlined text-primary !text-[20px]">article</span>
+<h4 class="text-sm font-bold text-slate-700 dark:text-slate-200">Posts Management</h4>
+</div>
+<div class="p-6 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
+<label class="flex items-start gap-3 p-4 rounded-lg border border-slate-100 dark:border-slate-800 hover:border-primary/30 hover:bg-slate-50 dark:hover:bg-slate-800/50 cursor-pointer transition-all">
+<input class="mt-1 rounded border-slate-300 text-primary focus:ring-primary" type="checkbox"/>
+<div class="flex flex-col">
+<span class="text-sm font-bold text-slate-900 dark:text-white">View Posts</span>
+<span class="text-[11px] text-slate-500">Read-only access to articles</span>
+</div>
+</label>
+<label class="flex items-start gap-3 p-4 rounded-lg border border-slate-100 dark:border-slate-800 hover:border-primary/30 hover:bg-slate-50 dark:hover:bg-slate-800/50 cursor-pointer transition-all">
+<input class="mt-1 rounded border-slate-300 text-primary focus:ring-primary" type="checkbox"/>
+<div class="flex flex-col">
+<span class="text-sm font-bold text-slate-900 dark:text-white">Create Posts</span>
+<span class="text-[11px] text-slate-500">Draft new blog entries</span>
+</div>
+</label>
+<label class="flex items-start gap-3 p-4 rounded-lg border border-slate-100 dark:border-slate-800 hover:border-primary/30 hover:bg-slate-50 dark:hover:bg-slate-800/50 cursor-pointer transition-all">
+<input class="mt-1 rounded border-slate-300 text-primary focus:ring-primary" type="checkbox"/>
+<div class="flex flex-col">
+<span class="text-sm font-bold text-slate-900 dark:text-white">Edit Any</span>
+<span class="text-[11px] text-slate-500">Modify content by others</span>
+</div>
+</label>
+<label class="flex items-start gap-3 p-4 rounded-lg border border-slate-100 dark:border-slate-800 hover:border-primary/30 hover:bg-slate-50 dark:hover:bg-slate-800/50 cursor-pointer transition-all">
+<input class="mt-1 rounded border-slate-300 text-primary focus:ring-primary" type="checkbox"/>
+<div class="flex flex-col">
+<span class="text-sm font-bold text-slate-900 dark:text-white">Publish Posts</span>
+<span class="text-[11px] text-slate-500">Make content public</span>
+</div>
+</label>
+</div>
+</div>
+<div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl overflow-hidden shadow-sm">
+<div class="px-6 py-4 bg-slate-50 dark:bg-slate-800/50 border-b border-slate-100 dark:border-slate-800 flex items-center gap-3">
+<span class="material-symbols-outlined text-primary !text-[20px]">person_search</span>
+<h4 class="text-sm font-bold text-slate-700 dark:text-slate-200">Users &amp; Profiles</h4>
+</div>
+<div class="p-6 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
+<label class="flex items-start gap-3 p-4 rounded-lg border border-slate-100 dark:border-slate-800 hover:border-primary/30 hover:bg-slate-50 dark:hover:bg-slate-800/50 cursor-pointer transition-all">
+<input class="mt-1 rounded border-slate-300 text-primary focus:ring-primary" type="checkbox"/>
+<div class="flex flex-col">
+<span class="text-sm font-bold text-slate-900 dark:text-white">View Directory</span>
+<span class="text-[11px] text-slate-500">List and search users</span>
+</div>
+</label>
+<label class="flex items-start gap-3 p-4 rounded-lg border border-slate-100 dark:border-slate-800 hover:border-primary/30 hover:bg-slate-50 dark:hover:bg-slate-800/50 cursor-pointer transition-all">
+<input class="mt-1 rounded border-slate-300 text-primary focus:ring-primary" type="checkbox"/>
+<div class="flex flex-col">
+<span class="text-sm font-bold text-slate-900 dark:text-white">Manage Roles</span>
+<span class="text-[11px] text-slate-500">Assign roles to users</span>
+</div>
+</label>
+<label class="flex items-start gap-3 p-4 rounded-lg border border-slate-100 dark:border-slate-800 hover:border-primary/30 hover:bg-slate-50 dark:hover:bg-slate-800/50 cursor-pointer transition-all">
+<input class="mt-1 rounded border-slate-300 text-primary focus:ring-primary" type="checkbox"/>
+<div class="flex flex-col">
+<span class="text-sm font-bold text-slate-900 dark:text-white">Suspend Users</span>
+<span class="text-[11px] text-slate-500">Block account access</span>
+</div>
+</label>
+</div>
+</div>
+<div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl overflow-hidden shadow-sm">
+<div class="px-6 py-4 bg-slate-50 dark:bg-slate-800/50 border-b border-slate-100 dark:border-slate-800 flex items-center gap-3">
+<span class="material-symbols-outlined text-primary !text-[20px]">forum</span>
+<h4 class="text-sm font-bold text-slate-700 dark:text-slate-200">Comment Moderation</h4>
+</div>
+<div class="p-6 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
+<label class="flex items-start gap-3 p-4 rounded-lg border border-slate-100 dark:border-slate-800 hover:border-primary/30 hover:bg-slate-50 dark:hover:bg-slate-800/50 cursor-pointer transition-all">
+<input class="mt-1 rounded border-slate-300 text-primary focus:ring-primary" type="checkbox"/>
+<div class="flex flex-col">
+<span class="text-sm font-bold text-slate-900 dark:text-white">Approve</span>
+<span class="text-[11px] text-slate-500">Validate pending comments</span>
+</div>
+</label>
+<label class="flex items-start gap-3 p-4 rounded-lg border border-slate-100 dark:border-slate-800 hover:border-primary/30 hover:bg-slate-50 dark:hover:bg-slate-800/50 cursor-pointer transition-all">
+<input class="mt-1 rounded border-slate-300 text-primary focus:ring-primary" type="checkbox"/>
+<div class="flex flex-col">
+<span class="text-sm font-bold text-slate-900 dark:text-white">Delete</span>
+<span class="text-[11px] text-slate-500">Remove inappropriate content</span>
+</div>
+</label>
+<label class="flex items-start gap-3 p-4 rounded-lg border border-slate-100 dark:border-slate-800 hover:border-primary/30 hover:bg-slate-50 dark:hover:bg-slate-800/50 cursor-pointer transition-all">
+<input class="mt-1 rounded border-slate-300 text-primary focus:ring-primary" type="checkbox"/>
+<div class="flex flex-col">
+<span class="text-sm font-bold text-slate-900 dark:text-white">Ban Users</span>
+<span class="text-[11px] text-slate-500">Restrict commenting ability</span>
+</div>
+</label>
+</div>
+</div>
+</div>
+</section>
+<div class="flex items-center justify-end gap-3 pt-8 border-t border-slate-200 dark:border-slate-800">
+<button class="px-6 py-2.5 text-sm font-bold text-slate-500 hover:text-slate-800 dark:text-slate-400 dark:hover:text-slate-200 transition-colors" type="button">
+                    Discard Changes
+                </button>
+<button class="px-8 py-2.5 bg-primary text-white text-sm font-bold rounded-lg shadow-lg shadow-primary/20 hover:brightness-110 transition-all" type="submit">
+                    Create Role &amp; Assign Permissions
+                </button>
+</div>
+</form>
+</main>
+</div>
+
+</body></html>

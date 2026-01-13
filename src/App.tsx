@@ -5,6 +5,8 @@ import CategoryPage from '@/pages/user/CategoryPage';
 import AdminLoginPage from '@/pages/admin/AdminLoginPage';
 import AdminDashboardPage from '@/pages/admin/AdminDashboardPage';
 import AdminAddPostPage from '@/pages/admin/AdminAddPostPage';
+import RoleManagementPage from '@/pages/admin/RoleManagementPage';
+import CreateRolePage from '@/pages/admin/CreateRolePage';
 import { AuthProvider } from '@/features/Auth/context/AuthContext';
 // import ProtectedRoute from '@/features/Auth/components/ProtectedRoute';
 
@@ -33,6 +35,22 @@ function App() {
             element={
               // <ProtectedRoute allowedRoles={['admin']}>
               <AdminAddPostPage />
+              // </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/admin/roles"
+            element={
+              // <ProtectedRoute allowedRoles={['admin']}>
+              <RoleManagementPage />
+              // </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/admin/roles/create"
+            element={
+              // <ProtectedRoute allowedRoles={['admin']}>
+              <CreateRolePage />
               // </ProtectedRoute>
             }
           />

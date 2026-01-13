@@ -1,290 +1,148 @@
 import React from 'react';
-import { useAuth } from '@/features/Auth/context/AuthContext';
-import { Link } from 'react-router-dom';
+import AdminLayout from '@/layouts/AdminLayout';
 
 const AdminDashboardPage: React.FC = () => {
-    const { user, logout } = useAuth();
-    const [isSidebarOpen, setIsSidebarOpen] = React.useState(false);
-
     return (
-        <div className="flex h-screen w-full bg-background-light dark:bg-background-dark font-display text-slate-900 dark:text-slate-100 antialiased overflow-hidden">
-            {/* Mobile Sidebar Overlay */}
-            {isSidebarOpen && (
-                <div
-                    className="fixed inset-0 z-40 bg-slate-900/50 lg:hidden backdrop-blur-sm transition-opacity"
-                    onClick={() => setIsSidebarOpen(false)}
-                />
-            )}
-
-            {/* Sidebar */}
-            <aside className={`fixed inset-y-0 left-0 z-50 w-64 flex-col border-r border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 h-full transition-transform duration-200 ease-in-out lg:translate-x-0 lg:static lg:flex ${isSidebarOpen ? 'translate-x-0' : '-translate-x-full'}`}>
-                <div className="flex h-16 items-center px-6 border-b border-slate-200 dark:border-slate-800">
-                    <Link to="/" className="flex items-center gap-2 text-primary font-bold text-xl">
-                        <span className="material-symbols-outlined text-3xl">space_dashboard</span>
-                        <span>BlogAdmin</span>
-                    </Link>
-                </div>
-                <div className="flex-1 overflow-y-auto py-4 px-3 space-y-1">
-                    <div className="px-3 mb-2 text-xs font-semibold text-slate-400 uppercase tracking-wider">Overview</div>
-                    <a
-                        className="flex items-center gap-3 px-3 py-2.5 rounded-lg bg-primary/10 text-primary dark:text-primary transition-colors"
-                        href="#"
-                    >
-                        <span className="material-symbols-outlined">dashboard</span>
-                        <span className="text-sm font-medium">Dashboard</span>
-                    </a>
-                    <div className="px-3 mt-6 mb-2 text-xs font-semibold text-slate-400 uppercase tracking-wider">Content</div>
-                    <a
-                        className="flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors group"
-                        href="#"
-                    >
-                        <span className="material-symbols-outlined group-hover:text-primary">article</span>
-                        <span className="text-sm font-medium group-hover:text-primary">Posts</span>
-                    </a>
-                    <a
-                        className="flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors group"
-                        href="#"
-                    >
-                        <span className="material-symbols-outlined group-hover:text-primary">category</span>
-                        <span className="text-sm font-medium group-hover:text-primary">Categories</span>
-                    </a>
-                    <a
-                        className="flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors group"
-                        href="#"
-                    >
-                        <span className="material-symbols-outlined group-hover:text-primary">image</span>
-                        <span className="text-sm font-medium group-hover:text-primary">Media</span>
-                    </a>
-                    <div className="px-3 mt-6 mb-2 text-xs font-semibold text-slate-400 uppercase tracking-wider">Management</div>
-                    <a
-                        className="flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors group"
-                        href="#"
-                    >
-                        <span className="material-symbols-outlined group-hover:text-primary">group</span>
-                        <span className="text-sm font-medium group-hover:text-primary">Users</span>
-                    </a>
-                    <a
-                        className="flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors group"
-                        href="#"
-                    >
-                        <span className="material-symbols-outlined group-hover:text-primary">comment</span>
-                        <span className="text-sm font-medium group-hover:text-primary">Comments</span>
-                        <span className="ml-auto bg-red-500 text-white text-xs font-bold px-2 py-0.5 rounded-full">3</span>
-                    </a>
-                </div>
-                <div className="p-4 border-t border-slate-200 dark:border-slate-800">
-                    <a
-                        className="flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors group"
-                        href="#"
-                    >
-                        <span className="material-symbols-outlined group-hover:text-primary">settings</span>
-                        <span className="text-sm font-medium group-hover:text-primary">Settings</span>
-                    </a>
-                    <button
-                        onClick={logout}
-                        className="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors mt-1"
-                    >
-                        <span className="material-symbols-outlined">logout</span>
-                        <span className="text-sm font-medium">Log Out</span>
-                    </button>
-                </div>
-            </aside>
-
-            {/* Main Content Wrapper */}
-            <div className="flex-1 flex flex-col h-full overflow-hidden relative">
-                {/* Top Navigation */}
-                <header className="h-16 flex items-center justify-between px-6 bg-white dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800 z-10">
-                    <div className="flex items-center gap-4 lg:hidden">
-                        <button
-                            className="text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-200"
-                            onClick={() => setIsSidebarOpen(!isSidebarOpen)}
-                        >
-                            <span className="material-symbols-outlined">menu</span>
-                        </button>
-                        <span className="font-bold text-lg text-slate-900 dark:text-white">BlogAdmin</span>
+        <AdminLayout>
+            <div className="max-w-7xl mx-auto space-y-6">
+                {/* Page Heading */}
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                    <div>
+                        <h1 className="text-3xl font-bold text-slate-900 dark:text-white tracking-tight">Posts</h1>
+                        <p className="text-slate-500 dark:text-slate-400 mt-1">Manage and organize your blog content</p>
                     </div>
-                    {/* Global Search */}
-                    <div className="hidden md:flex flex-1 max-w-xl mx-4">
-                        <div className="relative w-full group">
-                            <span className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-primary transition-colors material-symbols-outlined">
+                    <div className="flex gap-3">
+                        <button className="hidden sm:flex items-center justify-center h-10 px-4 rounded-lg border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-200 font-medium hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors">
+                            <span className="material-symbols-outlined text-[20px] mr-2">download</span>
+                            Export
+                        </button>
+                        <button className="flex items-center justify-center h-10 px-4 rounded-lg bg-primary text-white font-medium hover:bg-primary/90 transition-colors shadow-sm shadow-primary/30">
+                            <span className="material-symbols-outlined text-[20px] mr-2">add</span>
+                            Add New Post
+                        </button>
+                    </div>
+                </div>
+
+                {/* Statistics Cards */}
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                    <StatCard title="Total Posts" value="1,248" trend="+12%" icon="library_books" color="blue" />
+                    <StatCard title="Published" value="1,180" progress={92} icon="check_circle" color="emerald" />
+                    <StatCard title="Drafts" value="42" subtitle="Needs review" icon="edit_note" color="amber" />
+                    <StatCard title="Total Views" value="48.2k" trend="+24%" icon="visibility" color="purple" />
+                </div>
+
+                {/* Filters and Search Bar */}
+                <div className="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm p-4">
+                    <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+                        <div className="relative w-full md:w-96">
+                            <span className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 material-symbols-outlined text-[20px]">
                                 search
                             </span>
                             <input
-                                className="w-full bg-slate-100 dark:bg-slate-800 border-none rounded-lg py-2.5 pl-10 pr-4 text-sm focus:ring-2 focus:ring-primary/50 transition-all placeholder:text-slate-400 dark:text-white outline-none"
-                                placeholder="Search posts, users, comments..."
+                                className="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg py-2 pl-10 pr-4 text-sm focus:ring-1 focus:ring-primary focus:border-primary transition-all dark:text-white outline-none"
+                                placeholder="Search by title, author, or tag..."
                                 type="text"
                             />
-                            <div className="absolute right-3 top-1/2 -translate-y-1/2 flex items-center gap-1">
-                                <kbd className="hidden sm:inline-block px-2 py-0.5 bg-white dark:bg-slate-700 border border-slate-200 dark:border-slate-600 rounded text-xs text-slate-400 font-sans">
-                                    ⌘ K
-                                </kbd>
-                            </div>
+                        </div>
+                        <div className="flex flex-wrap items-center gap-3">
+                            <SelectFilter options={['All Categories', 'Technology', 'Design', 'Lifestyle']} />
+                            <SelectFilter options={['Status: All', 'Published', 'Draft', 'Archived']} />
+                            <button className="p-2 text-slate-500 hover:text-primary hover:bg-slate-100 dark:hover:bg-slate-800 rounded-lg transition-colors">
+                                <span className="material-symbols-outlined text-[20px]">filter_alt_off</span>
+                            </button>
                         </div>
                     </div>
-                    {/* Right Actions */}
-                    <div className="flex items-center gap-3 ml-auto">
-                        <button className="relative p-2 text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-lg transition-colors">
-                            <span className="material-symbols-outlined">notifications</span>
-                            <span className="absolute top-2 right-2 w-2 h-2 bg-red-500 rounded-full border-2 border-white dark:border-slate-900"></span>
-                        </button>
-                        <div className="h-8 w-px bg-slate-200 dark:bg-slate-700 mx-1"></div>
-                        <button className="flex items-center gap-3 pl-2 pr-1 py-1 hover:bg-slate-50 dark:hover:bg-slate-800 rounded-lg transition-colors">
-                            <div className="text-right hidden sm:block">
-                                <p className="text-sm font-medium text-slate-900 dark:text-white">{user?.name || 'Jane Admin'}</p>
-                                <p className="text-xs text-slate-500 dark:text-slate-400">{user?.title || 'Editor in Chief'}</p>
-                            </div>
-                            <img
-                                className="w-9 h-9 rounded-full object-cover border border-slate-200 dark:border-slate-700"
-                                src={user?.avatar || "https://lh3.googleusercontent.com/aida-public/AB6AXuAMovp_8kO7HK54BhhbkySN1_-bAQTaDVuzzMvjGM8U83ndS_0RQF4QWwKKR6RfySWmxQGXFqsYVePfmleXNS4Gn29R_Rcdn2cY8Pu_6UfP-Ia23BSYw5H-gEA8LQG2WH11wkSk-ju9DSinwMIptI9lpNPnKmV_Ts34T60IMxtrMRwCmjyg9lrxPTZWgdnKcZNQYjv8vcaXsVOhpyWEjTa6pi11KY7ZZzXQTL_o5MTsWcXaI_aTikWBlbpH-ZG3wYeDW7TWx_fqUA"}
-                                alt="User avatar"
-                            />
-                        </button>
+                </div>
+
+                {/* Data Table */}
+                <div className="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm overflow-hidden">
+                    <div className="overflow-x-auto">
+                        <table className="w-full text-left border-collapse">
+                            <thead>
+                                <tr className="bg-slate-50 dark:bg-slate-800/50 border-b border-slate-200 dark:border-slate-800">
+                                    <th className="p-4 w-10">
+                                        <input className="rounded border-slate-300 text-primary focus:ring-primary h-4 w-4" type="checkbox" />
+                                    </th>
+                                    <th className="p-4 text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider">
+                                        Post
+                                    </th>
+                                    <th className="p-4 text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider">
+                                        Author
+                                    </th>
+                                    <th className="p-4 text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider">
+                                        Category
+                                    </th>
+                                    <th className="p-4 text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider">
+                                        Date
+                                    </th>
+                                    <th className="p-4 text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider">
+                                        Status
+                                    </th>
+                                    <th className="p-4 text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider text-right">
+                                        Actions
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
+                                <PostRow
+                                    image="https://lh3.googleusercontent.com/aida-public/AB6AXuAC7pzgNrxDWnQWevmtfPWcAIgPjr2iC5yh19W1Sm_ueiuL_0Nlv-V7Bw0-rvWYUu-mze4D0LmzIZw8C9bVs70TMDzOp4GtriTRKOh-fXBnbeChcD5UxxYfF-b1_yuLEk7HwDoeD_l57unF4qCJypzDZZhddDwy_109OpUnS1U2DFEtDhWADRQkOc9grw477atIHR1z0MmwEfJ8FFbH3rj8lrBuJIO6Um9mtZE3XGl39xFjOGyZckCnWRBqXHpaerOR5I7kIaF4lQ"
+                                    title="10 Tips for Modern Web Design in 2024"
+                                    excerpt="Exploring the latest trends including glassmorphism, huge type..."
+                                    author="Sarah J."
+                                    authorImage="https://lh3.googleusercontent.com/aida-public/AB6AXuBBbM0Hv1o1xJJjicE4s-vl3wNW5Wvz2m8S0V5dFF0nNe9pX2zUKvokfgVD_-MhSyBasGB8ETASDjzfyGPrxkBHjYTZDYWMQxF6Yq0nJ_sxbeJ9tBpGFed5c2IBna6vtA5oykwx9IXmr-eepL4srsjB3dO0Hu_PToXW8MuKl0y-dVn8yDlMPXibjH8wY_7JTUJJCUyQgvPV_TBFfpccn3_1crzhAa36phVm7Y_1e79mfBxVRHJNLW4oOrX2ElEH32eRJKp9wCxepg"
+                                    category="Design"
+                                    date="Oct 24, 2023"
+                                    status="Published"
+                                />
+                                <PostRow
+                                    image="https://lh3.googleusercontent.com/aida-public/AB6AXuDSn3Xs0pF6kvc-C_XT6mwTNk8x18IG5TWmkBGWhzkiwnDK__UEcoXFAl50I0a9T6UqdYl6Jux-a9BLVlRdsu2DGQeP2kxSonIBMd4ldwxkio9HpL3cVmeZnxl2-ZCgzVO-5bKPwXZvTceMc3acv9pbBO1uMPlum_KD8v8UxxSv6if8h4cEKDBqEX1V7xvIlOVNS8-CsKYI3N1E0C1qYYWfqeSiEM2RACqit40U1Db_rHvy0104Z3uGDXgAzVeURb69rgIHb5cUXw"
+                                    title="Understanding React Server Components"
+                                    excerpt="A deep dive into RSC and how it changes the landscape of frontend dev..."
+                                    author="Mike R."
+                                    authorImage="https://lh3.googleusercontent.com/aida-public/AB6AXuB98GDernvbhm8uU9CGUaDen8hi0czTPldibyi4JO9ixZppEfLBELkTLw3M8dFutoC5wSoNG8kIsngyNAp2L2NiLiUGulO3hs0zo_6KqNtIbbpwQRjALAkuoRuPxTA0CzZkCuodN_KpIT3SoS46sovjq9fqAztVyTRl7A_ub2ZwGs-0cYz7ROh3JEbc6q5LX98gPay_pzxc6EduySYozqt8HQmimqjjTkbMWjh7Cj00SDSdpVpeoC2nDQRlZXmBSeKDnbOkJkbi3A"
+                                    category="Development"
+                                    date="Oct 22, 2023"
+                                    status="Draft"
+                                />
+                                <PostRow
+                                    image="https://lh3.googleusercontent.com/aida-public/AB6AXuBCz0ykBCuWYiPtrMXqulHZuc0uTY6L-70sKjt_ym3nkev8PZHzyl8pnZ1bqrBkEJvmqzXH4rYo-cDyX0UcMo0zX6ZSZjRdRRyqpVuFTRQQ-1ecRasAMFsokcxqMYoYucdD04pWX9FoT8IzKLJeXv_IpI-oehWRAXN8_zON7d3LLg2lrYe1TVpQmNZq4-dlnJ8ZyYMTB_evRM0hamzRy2hZVAFKGHzZkpuMUZHkSVSyzf4GyUOzAoj6R9u6GtrqkGSKnR796LdiKA"
+                                    title="Building a Strong Remote Culture"
+                                    excerpt="Tips and tricks for keeping your remote team engaged and productive..."
+                                    author="Elena K."
+                                    authorImage="https://lh3.googleusercontent.com/aida-public/AB6AXuBXfMF_TgKREPT9WFBcN6TCKFAzlwa4s5rLLBF6tXzBgOJ5B_B_A8d9gaiTQmmU1D5YlfcO7J__Du8VRw6Wy793DIuy_5Dpc-wQ_odeSLcPh4VrutpwhxyWroz5wtlYe8uhDz5KrH6ONmHFIibZD1XrmoVFx3G2EnjwFuQY6VoO6PEsbu9D_Km5hddq4e7aAM4VWumz9vdK4k4Ph6N8IeNYUrzvdUi0Vkabo8Ctj6fKjfKzKjQSTlKPy9frnzXlaJ3APh7udaaF-A"
+                                    category="Lifestyle"
+                                    date="Oct 20, 2023"
+                                    status="Published"
+                                />
+                            </tbody>
+                        </table>
                     </div>
-                </header>
-
-                {/* Main Scrollable Area */}
-                <main className="flex-1 overflow-y-auto bg-background-light dark:bg-background-dark p-4 md:p-8">
-                    <div className="max-w-7xl mx-auto space-y-6">
-                        {/* Page Heading */}
-                        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-                            <div>
-                                <h1 className="text-3xl font-bold text-slate-900 dark:text-white tracking-tight">Posts</h1>
-                                <p className="text-slate-500 dark:text-slate-400 mt-1">Manage and organize your blog content</p>
-                            </div>
-                            <div className="flex gap-3">
-                                <button className="hidden sm:flex items-center justify-center h-10 px-4 rounded-lg border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-200 font-medium hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors">
-                                    <span className="material-symbols-outlined text-[20px] mr-2">download</span>
-                                    Export
-                                </button>
-                                <button className="flex items-center justify-center h-10 px-4 rounded-lg bg-primary text-white font-medium hover:bg-primary/90 transition-colors shadow-sm shadow-primary/30">
-                                    <span className="material-symbols-outlined text-[20px] mr-2">add</span>
-                                    Add New Post
-                                </button>
-                            </div>
-                        </div>
-
-                        {/* Statistics Cards */}
-                        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-                            <StatCard title="Total Posts" value="1,248" trend="+12%" icon="library_books" color="blue" />
-                            <StatCard title="Published" value="1,180" progress={92} icon="check_circle" color="emerald" />
-                            <StatCard title="Drafts" value="42" subtitle="Needs review" icon="edit_note" color="amber" />
-                            <StatCard title="Total Views" value="48.2k" trend="+24%" icon="visibility" color="purple" />
-                        </div>
-
-                        {/* Filters and Search Bar */}
-                        <div className="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm p-4">
-                            <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
-                                <div className="relative w-full md:w-96">
-                                    <span className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 material-symbols-outlined text-[20px]">
-                                        search
-                                    </span>
-                                    <input
-                                        className="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg py-2 pl-10 pr-4 text-sm focus:ring-1 focus:ring-primary focus:border-primary transition-all dark:text-white outline-none"
-                                        placeholder="Search by title, author, or tag..."
-                                        type="text"
-                                    />
-                                </div>
-                                <div className="flex flex-wrap items-center gap-3">
-                                    <SelectFilter options={['All Categories', 'Technology', 'Design', 'Lifestyle']} />
-                                    <SelectFilter options={['Status: All', 'Published', 'Draft', 'Archived']} />
-                                    <button className="p-2 text-slate-500 hover:text-primary hover:bg-slate-100 dark:hover:bg-slate-800 rounded-lg transition-colors">
-                                        <span className="material-symbols-outlined text-[20px]">filter_alt_off</span>
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-
-                        {/* Data Table */}
-                        <div className="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm overflow-hidden">
-                            <div className="overflow-x-auto">
-                                <table className="w-full text-left border-collapse">
-                                    <thead>
-                                        <tr className="bg-slate-50 dark:bg-slate-800/50 border-b border-slate-200 dark:border-slate-800">
-                                            <th className="p-4 w-10">
-                                                <input className="rounded border-slate-300 text-primary focus:ring-primary h-4 w-4" type="checkbox" />
-                                            </th>
-                                            <th className="p-4 text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider">
-                                                Post
-                                            </th>
-                                            <th className="p-4 text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider">
-                                                Author
-                                            </th>
-                                            <th className="p-4 text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider">
-                                                Category
-                                            </th>
-                                            <th className="p-4 text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider">
-                                                Date
-                                            </th>
-                                            <th className="p-4 text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider">
-                                                Status
-                                            </th>
-                                            <th className="p-4 text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider text-right">
-                                                Actions
-                                            </th>
-                                        </tr>
-                                    </thead>
-                                    <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
-                                        <PostRow
-                                            image="https://lh3.googleusercontent.com/aida-public/AB6AXuAC7pzgNrxDWnQWevmtfPWcAIgPjr2iC5yh19W1Sm_ueiuL_0Nlv-V7Bw0-rvWYUu-mze4D0LmzIZw8C9bVs70TMDzOp4GtriTRKOh-fXBnbeChcD5UxxYfF-b1_yuLEk7HwDoeD_l57unF4qCJypzDZZhddDwy_109OpUnS1U2DFEtDhWADRQkOc9grw477atIHR1z0MmwEfJ8FFbH3rj8lrBuJIO6Um9mtZE3XGl39xFjOGyZckCnWRBqXHpaerOR5I7kIaF4lQ"
-                                            title="10 Tips for Modern Web Design in 2024"
-                                            excerpt="Exploring the latest trends including glassmorphism, huge type..."
-                                            author="Sarah J."
-                                            authorImage="https://lh3.googleusercontent.com/aida-public/AB6AXuBBbM0Hv1o1xJJjicE4s-vl3wNW5Wvz2m8S0V5dFF0nNe9pX2zUKvokfgVD_-MhSyBasGB8ETASDjzfyGPrxkBHjYTZDYWMQxF6Yq0nJ_sxbeJ9tBpGFed5c2IBna6vtA5oykwx9IXmr-eepL4srsjB3dO0Hu_PToXW8MuKl0y-dVn8yDlMPXibjH8wY_7JTUJJCUyQgvPV_TBFfpccn3_1crzhAa36phVm7Y_1e79mfBxVRHJNLW4oOrX2ElEH32eRJKp9wCxepg"
-                                            category="Design"
-                                            date="Oct 24, 2023"
-                                            status="Published"
-                                        />
-                                        <PostRow
-                                            image="https://lh3.googleusercontent.com/aida-public/AB6AXuDSn3Xs0pF6kvc-C_XT6mwTNk8x18IG5TWmkBGWhzkiwnDK__UEcoXFAl50I0a9T6UqdYl6Jux-a9BLVlRdsu2DGQeP2kxSonIBMd4ldwxkio9HpL3cVmeZnxl2-ZCgzVO-5bKPwXZvTceMc3acv9pbBO1uMPlum_KD8v8UxxSv6if8h4cEKDBqEX1V7xvIlOVNS8-CsKYI3N1E0C1qYYWfqeSiEM2RACqit40U1Db_rHvy0104Z3uGDXgAzVeURb69rgIHb5cUXw"
-                                            title="Understanding React Server Components"
-                                            excerpt="A deep dive into RSC and how it changes the landscape of frontend dev..."
-                                            author="Mike R."
-                                            authorImage="https://lh3.googleusercontent.com/aida-public/AB6AXuB98GDernvbhm8uU9CGUaDen8hi0czTPldibyi4JO9ixZppEfLBELkTLw3M8dFutoC5wSoNG8kIsngyNAp2L2NiLiUGulO3hs0zo_6KqNtIbbpwQRjALAkuoRuPxTA0CzZkCuodN_KpIT3SoS46sovjq9fqAztVyTRl7A_ub2ZwGs-0cYz7ROh3JEbc6q5LX98gPay_pzxc6EduySYozqt8HQmimqjjTkbMWjh7Cj00SDSdpVpeoC2nDQRlZXmBSeKDnbOkJkbi3A"
-                                            category="Development"
-                                            date="Oct 22, 2023"
-                                            status="Draft"
-                                        />
-                                        <PostRow
-                                            image="https://lh3.googleusercontent.com/aida-public/AB6AXuBCz0ykBCuWYiPtrMXqulHZuc0uTY6L-70sKjt_ym3nkev8PZHzyl8pnZ1bqrBkEJvmqzXH4rYo-cDyX0UcMo0zX6ZSZjRdRRyqpVuFTRQQ-1ecRasAMFsokcxqMYoYucdD04pWX9FoT8IzKLJeXv_IpI-oehWRAXN8_zON7d3LLg2lrYe1TVpQmNZq4-dlnJ8ZyYMTB_evRM0hamzRy2hZVAFKGHzZkpuMUZHkSVSyzf4GyUOzAoj6R9u6GtrqkGSKnR796LdiKA"
-                                            title="Building a Strong Remote Culture"
-                                            excerpt="Tips and tricks for keeping your remote team engaged and productive..."
-                                            author="Elena K."
-                                            authorImage="https://lh3.googleusercontent.com/aida-public/AB6AXuBXfMF_TgKREPT9WFBcN6TCKFAzlwa4s5rLLBF6tXzBgOJ5B_B_A8d9gaiTQmmU1D5YlfcO7J__Du8VRw6Wy793DIuy_5Dpc-wQ_odeSLcPh4VrutpwhxyWroz5wtlYe8uhDz5KrH6ONmHFIibZD1XrmoVFx3G2EnjwFuQY6VoO6PEsbu9D_Km5hddq4e7aAM4VWumz9vdK4k4Ph6N8IeNYUrzvdUi0Vkabo8Ctj6fKjfKzKjQSTlKPy9frnzXlaJ3APh7udaaF-A"
-                                            category="Lifestyle"
-                                            date="Oct 20, 2023"
-                                            status="Published"
-                                        />
-                                    </tbody>
-                                </table>
-                            </div>
-                            <div className="flex items-center justify-between px-4 py-3 border-t border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900">
-                                <span className="text-sm text-slate-500 dark:text-slate-400">
-                                    Showing <span className="font-medium text-slate-900 dark:text-white">1</span> to{' '}
-                                    <span className="font-medium text-slate-900 dark:text-white">3</span> of{' '}
-                                    <span className="font-medium text-slate-900 dark:text-white">1,248</span> results
-                                </span>
-                                <div className="flex items-center gap-2">
-                                    <button className="px-3 py-1 text-sm font-medium text-slate-500 bg-white border border-slate-300 rounded-md hover:bg-slate-50 dark:bg-slate-800 dark:border-slate-700 dark:text-slate-400 dark:hover:bg-slate-700 disabled:opacity-50">
-                                        Previous
-                                    </button>
-                                    <button className="px-3 py-1 text-sm font-medium text-primary bg-white border border-primary rounded-md dark:bg-slate-800 dark:text-primary">
-                                        1
-                                    </button>
-                                    <button className="px-3 py-1 text-sm font-medium text-slate-500 bg-white border border-slate-300 rounded-md hover:bg-slate-50 dark:bg-slate-800 dark:border-slate-700 dark:text-slate-400 dark:hover:bg-slate-700">
-                                        Next
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                            <RecentComments />
-                            <QuickDraft />
+                    <div className="flex items-center justify-between px-4 py-3 border-t border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900">
+                        <span className="text-sm text-slate-500 dark:text-slate-400">
+                            Showing <span className="font-medium text-slate-900 dark:text-white">1</span> to{' '}
+                            <span className="font-medium text-slate-900 dark:text-white">3</span> of{' '}
+                            <span className="font-medium text-slate-900 dark:text-white">1,248</span> results
+                        </span>
+                        <div className="flex items-center gap-2">
+                            <button className="px-3 py-1 text-sm font-medium text-slate-500 bg-white border border-slate-300 rounded-md hover:bg-slate-50 dark:bg-slate-800 dark:border-slate-700 dark:text-slate-400 dark:hover:bg-slate-700 disabled:opacity-50">
+                                Previous
+                            </button>
+                            <button className="px-3 py-1 text-sm font-medium text-primary bg-white border border-primary rounded-md dark:bg-slate-800 dark:text-primary">
+                                1
+                            </button>
+                            <button className="px-3 py-1 text-sm font-medium text-slate-500 bg-white border border-slate-300 rounded-md hover:bg-slate-50 dark:bg-slate-800 dark:border-slate-700 dark:text-slate-400 dark:hover:bg-slate-700">
+                                Next
+                            </button>
                         </div>
                     </div>
-                </main>
+                </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <RecentComments />
+                    <QuickDraft />
+                </div>
             </div>
-        </div>
+        </AdminLayout>
     );
 };
 
