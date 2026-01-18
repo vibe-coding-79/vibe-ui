@@ -20,7 +20,7 @@ const Hero: React.FC = () => {
                     <div className="flex flex-col gap-3 text-left">
                         <Link to="/post/the-future-of-ai-in-design">
                             <h1 className="text-[#0d141b] dark:text-white text-3xl md:text-4xl lg:text-5xl font-black leading-tight tracking-tight hover:text-primary transition-colors cursor-pointer">
-                                The Future of AI in Design
+                                The Future of AI in Design 2
                             </h1>
                         </Link>
                         <p className="text-slate-600 dark:text-slate-300 text-base md:text-lg leading-relaxed">
