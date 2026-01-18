@@ -13,7 +13,6 @@
     "@ckeditor/ckeditor5-react": "^11.0.1",
     "@tailwindcss/vite": "^4.1.18",
     "@tanstack/react-query": "^5.90.16",
-    "@types/react-router-dom": "^5.3.3",
     "axios": "^1.13.2",
     "ckeditor5": "^47.3.0",
     "react": "^19.2.0",
