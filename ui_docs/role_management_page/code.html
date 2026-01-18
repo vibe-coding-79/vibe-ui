@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Role &amp; Permissions Management | BlogAdmin</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#136986",
+                        "background-light": "#ffffff",
+                        "background-dark": "#17191c",
+                    },
+                    fontFamily: {
+                        "display": ["Inter"]
+                    },
+                    borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<style type="text/tailwindcss">
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: #d1e1e6; border-radius: 10px; }
+        .dark ::-webkit-scrollbar-thumb { background: #334155; }
+        .role-table-row:hover .action-buttons {
+            opacity: 1;
+        }
+        .nav-link {
+            @apply flex items-center gap-3 px-3 py-2 rounded-lg text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 font-medium transition-all text-sm;
+        }
+        .nav-link.active {
+            @apply bg-primary/10 text-primary font-bold shadow-sm ring-1 ring-primary/20;
+        }
+        .nav-link.active .material-symbols-outlined {
+            font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .nav-section-title {
+            @apply text-[10px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest mt-6 mb-2 px-3;
+        }
+    </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark font-display text-slate-900 dark:text-slate-100 antialiased">
+<div class="flex h-screen overflow-hidden">
+<aside class="w-72 border-r border-slate-200 dark:border-slate-800 bg-background-light dark:bg-background-dark flex flex-col shrink-0">
+<div class="p-6 flex flex-col h-full overflow-y-auto">
+<div class="flex items-center gap-3 mb-8">
+<div class="bg-primary size-10 rounded-lg flex items-center justify-center text-white">
+<span class="material-symbols-outlined">shield_person</span>
+</div>
+<div class="flex flex-col">
+<h1 class="text-[#0e171b] dark:text-white text-base font-bold leading-none">BlogAdmin</h1>
+<p class="text-primary text-[10px] font-bold tracking-widest uppercase mt-1">RBAC System</p>
+</div>
+</div>
+<nav class="flex flex-col gap-1 grow">
+<a class="nav-link" href="#">
+<span class="material-symbols-outlined">dashboard</span>
+<span>Dashboard</span>
+</a>
+<p class="nav-section-title">Content Management</p>
+<a class="nav-link" href="#">
+<span class="material-symbols-outlined">description</span>
+<span>Posts</span>
+</a>
+<a class="nav-link" href="#">
+<span class="material-symbols-outlined">category</span>
+<span>Categories</span>
+</a>
+<a class="nav-link" href="#">
+<span class="material-symbols-outlined">label</span>
+<span>Tags</span>
+</a>
+<p class="nav-section-title">User Management</p>
+<a class="nav-link" href="#">
+<span class="material-symbols-outlined">person</span>
+<span>Users</span>
+</a>
+<a class="nav-link active" href="#">
+<span class="material-symbols-outlined">verified_user</span>
+<span>Roles</span>
+</a>
+<a class="nav-link" href="#">
+<span class="material-symbols-outlined">key</span>
+<span>Permissions</span>
+</a>
+<p class="nav-section-title">System</p>
+<a class="nav-link" href="#">
+<span class="material-symbols-outlined">settings</span>
+<span>Settings</span>
+</a>
+<a class="nav-link" href="#">
+<span class="material-symbols-outlined">list_alt</span>
+<span>Logs</span>
+</a>
+<div class="mt-auto pt-6 border-t border-slate-100 dark:border-slate-800">
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-500 dark:text-slate-500 hover:text-primary transition-colors" href="#">
+<span class="material-symbols-outlined">arrow_back</span>
+<span class="text-sm">Back to Blog</span>
+</a>
+</div>
+</nav>
+<div class="mt-6 pt-6 border-t border-slate-100 dark:border-slate-800 flex items-center gap-3">
+<div class="bg-center bg-no-repeat aspect-square bg-cover rounded-full size-9 border border-slate-200" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuAGhnziwjRx_XRW-Zou5K0HsMraUKoFvdonu_1J4R_O9-Sf3EdwcK7_dCnnIG6_AJ4xvx_pB3OqRfAtdGuzL2wLmfk6cXrxw8iCvtgTJFHyapeSSnGY3FP3CNQe5pnkmJzsTQvE8lBi429v6Ln90t2OPKPsj3s-XU8zoF8dEgMcNJlQ-1XTT__X4dxcZet-lG2JRTwSPqHh-6lQas-riSPtlyPWnrKrjQZCaHHDSh9kkXrfRyLlhu2kh_q5Xdo6dDBWbpq1Hy_Lug");'></div>
+<div class="flex flex-col min-w-0">
+<p class="text-xs font-bold truncate">Admin User</p>
+<p class="text-[10px] text-slate-500 uppercase tracking-tighter leading-none">Super User</p>
+</div>
+</div>
+</div>
+</aside>
+<main class="flex-1 flex flex-col overflow-y-auto">
+<header class="p-8 pb-4">
+<div class="flex flex-wrap justify-between items-end gap-4">
+<div class="flex flex-col gap-1">
+<h2 class="text-slate-900 dark:text-white text-3xl font-black leading-tight tracking-tight">Role Management</h2>
+<p class="text-slate-500 dark:text-slate-400 text-sm max-w-xl">Configure granular access controls and define system-wide operational capabilities for blog contributors and staff.</p>
+</div>
+<div class="flex gap-3">
+<button class="flex items-center gap-2 px-5 py-2.5 bg-[#136986] text-white text-sm font-bold rounded-lg shadow-sm hover:brightness-110 transition-all">
+<span class="material-symbols-outlined !text-[18px]">add</span>
+<span>Create Role</span>
+</button>
+</div>
+</div>
+</header>
+<section class="px-8 py-4">
+<div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+<div class="bg-white dark:bg-slate-800/40 p-5 rounded-xl border border-slate-200 dark:border-slate-800 flex items-center gap-4">
+<div class="bg-blue-50 dark:bg-blue-900/20 text-blue-600 p-3 rounded-lg">
+<span class="material-symbols-outlined">badge</span>
+</div>
+<div>
+<p class="text-xs font-bold text-slate-500 uppercase tracking-wider">Total Roles</p>
+<p class="text-2xl font-black text-slate-900 dark:text-white">8</p>
+</div>
+</div>
+<div class="bg-white dark:bg-slate-800/40 p-5 rounded-xl border border-slate-200 dark:border-slate-800 flex items-center gap-4">
+<div class="bg-emerald-50 dark:bg-emerald-900/20 text-emerald-600 p-3 rounded-lg">
+<span class="material-symbols-outlined">rule</span>
+</div>
+<div>
+<p class="text-xs font-bold text-slate-500 uppercase tracking-wider">Active Permissions</p>
+<p class="text-2xl font-black text-slate-900 dark:text-white">42</p>
+</div>
+</div>
+<div class="bg-white dark:bg-slate-800/40 p-5 rounded-xl border border-slate-200 dark:border-slate-800 flex items-center gap-4">
+<div class="bg-amber-50 dark:bg-amber-900/20 text-amber-600 p-3 rounded-lg">
+<span class="material-symbols-outlined">groups</span>
+</div>
+<div>
+<p class="text-xs font-bold text-slate-500 uppercase tracking-wider">Assigned Users</p>
+<p class="text-2xl font-black text-slate-900 dark:text-white">156</p>
+</div>
+</div>
+</div>
+</section>
+<section class="px-8 py-4">
+<div class="flex flex-wrap items-center justify-between gap-4 bg-slate-50 dark:bg-slate-900/40 p-3 rounded-xl border border-slate-100 dark:border-slate-800">
+<div class="flex items-center gap-2 flex-1 min-w-[300px]">
+<div class="relative w-full max-w-md">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 !text-[20px]">search</span>
+<input class="w-full pl-10 pr-4 py-2 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg text-sm focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition-all" placeholder="Search roles by name or description..." type="text"/>
+</div>
+<button class="flex items-center gap-2 px-4 py-2 text-slate-600 dark:text-slate-300 hover:bg-white dark:hover:bg-slate-800 rounded-lg text-sm font-semibold transition-all">
+<span class="material-symbols-outlined !text-[18px]">filter_list</span>
+<span>Filter</span>
+</button>
+</div>
+<div class="flex items-center gap-2">
+<button class="p-2 text-slate-400 hover:text-slate-600 transition-colors">
+<span class="material-symbols-outlined">download</span>
+</button>
+<button class="p-2 text-slate-400 hover:text-slate-600 transition-colors">
+<span class="material-symbols-outlined">settings</span>
+</button>
+</div>
+</div>
+</section>
+<section class="px-8 py-4 mb-8">
+<div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl overflow-hidden shadow-sm">
+<table class="w-full text-left border-collapse">
+<thead>
+<tr class="bg-slate-50 dark:bg-slate-800/50 border-b border-slate-200 dark:border-slate-800">
+<th class="px-6 py-4 text-[11px] font-black text-slate-500 dark:text-slate-400 uppercase tracking-widest w-[25%]">Role Identity</th>
+<th class="px-6 py-4 text-[11px] font-black text-slate-500 dark:text-slate-400 uppercase tracking-widest w-[30%]">Access Scope</th>
+<th class="px-6 py-4 text-[11px] font-black text-slate-500 dark:text-slate-400 uppercase tracking-widest w-[25%]">Key Capabilities</th>
+<th class="px-6 py-4 text-[11px] font-black text-slate-500 dark:text-slate-400 uppercase tracking-widest w-[10%] text-center">Users</th>
+<th class="px-6 py-4 text-[11px] font-black text-slate-500 dark:text-slate-400 uppercase tracking-widest w-[10%] text-right">Actions</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-slate-100 dark:divide-slate-800">
+<tr class="role-table-row hover:bg-slate-50/50 dark:hover:bg-slate-800/30 transition-colors group">
+<td class="px-6 py-5">
+<div class="flex flex-col">
+<span class="text-sm font-bold text-slate-900 dark:text-white flex items-center gap-2">
+                                    Super Admin
+                                    <span class="px-1.5 py-0.5 rounded text-[9px] bg-slate-100 dark:bg-slate-700 text-slate-500 uppercase font-black">System</span>
+</span>
+<span class="text-xs text-slate-500 mt-0.5 tracking-tight">full_access_node</span>
+</div>
+</td>
+<td class="px-6 py-5">
+<p class="text-sm text-slate-600 dark:text-slate-400 line-clamp-2">Complete administrative control over all system modules, settings, and user hierarchies.</p>
+</td>
+<td class="px-6 py-5">
+<div class="flex flex-wrap gap-1.5">
+<span class="px-2 py-1 bg-primary/10 text-primary text-[10px] font-bold rounded">ALL_PERMISSIONS</span>
+</div>
+</td>
+<td class="px-6 py-5 text-center">
+<span class="text-sm font-bold text-slate-700 dark:text-slate-300">3</span>
+</td>
+<td class="px-6 py-5 text-right">
+<div class="action-buttons flex justify-end gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+<button class="p-2 hover:bg-primary/10 text-slate-400 hover:text-primary rounded-lg">
+<span class="material-symbols-outlined !text-[18px]">edit</span>
+</button>
+<button class="p-2 text-slate-300 rounded-lg cursor-not-allowed">
+<span class="material-symbols-outlined !text-[18px]">lock</span>
+</button>
+</div>
+</td>
+</tr>
+<tr class="role-table-row hover:bg-slate-50/50 dark:hover:bg-slate-800/30 transition-colors group">
+<td class="px-6 py-5">
+<div class="flex flex-col">
+<span class="text-sm font-bold text-slate-900 dark:text-white">Chief Editor</span>
+<span class="text-xs text-slate-500 mt-0.5 tracking-tight">content_lead</span>
+</div>
+</td>
+<td class="px-6 py-5">
+<p class="text-sm text-slate-600 dark:text-slate-400 line-clamp-2">Manage all blog content, categories, and tags. Oversee contributor submissions.</p>
+</td>
+<td class="px-6 py-5">
+<div class="flex flex-wrap gap-1.5">
+<span class="px-2 py-1 bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 text-[10px] font-bold rounded">POST_PUBLISH</span>
+<span class="px-2 py-1 bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 text-[10px] font-bold rounded">CAT_MANAGE</span>
+<span class="px-2 py-1 bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 text-[10px] font-bold rounded">+4 more</span>
+</div>
+</td>
+<td class="px-6 py-5 text-center">
+<span class="text-sm font-bold text-slate-700 dark:text-slate-300">12</span>
+</td>
+<td class="px-6 py-5 text-right">
+<div class="action-buttons flex justify-end gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+<button class="p-2 hover:bg-primary/10 text-slate-400 hover:text-primary rounded-lg">
+<span class="material-symbols-outlined !text-[18px]">edit</span>
+</button>
+<button class="p-2 hover:bg-red-50 text-slate-400 hover:text-red-500 rounded-lg">
+<span class="material-symbols-outlined !text-[18px]">delete</span>
+</button>
+</div>
+</td>
+</tr>
+<tr class="role-table-row hover:bg-slate-50/50 dark:hover:bg-slate-800/30 transition-colors group">
+<td class="px-6 py-5">
+<div class="flex flex-col">
+<span class="text-sm font-bold text-slate-900 dark:text-white">Staff Author</span>
+<span class="text-xs text-slate-500 mt-0.5 tracking-tight">internal_writer</span>
+</div>
+</td>
+<td class="px-6 py-5">
+<p class="text-sm text-slate-600 dark:text-slate-400 line-clamp-2">Create and edit personal articles. Access to media library and analytics.</p>
+</td>
+<td class="px-6 py-5">
+<div class="flex flex-wrap gap-1.5">
+<span class="px-2 py-1 bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 text-[10px] font-bold rounded">POST_CREATE</span>
+<span class="px-2 py-1 bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 text-[10px] font-bold rounded">MEDIA_UPLOAD</span>
+</div>
+</td>
+<td class="px-6 py-5 text-center">
+<span class="text-sm font-bold text-slate-700 dark:text-slate-300">45</span>
+</td>
+<td class="px-6 py-5 text-right">
+<div class="action-buttons flex justify-end gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+<button class="p-2 hover:bg-primary/10 text-slate-400 hover:text-primary rounded-lg">
+<span class="material-symbols-outlined !text-[18px]">edit</span>
+</button>
+<button class="p-2 hover:bg-red-50 text-slate-400 hover:text-red-500 rounded-lg">
+<span class="material-symbols-outlined !text-[18px]">delete</span>
+</button>
+</div>
+</td>
+</tr>
+<tr class="role-table-row hover:bg-slate-50/50 dark:hover:bg-slate-800/30 transition-colors group">
+<td class="px-6 py-5">
+<div class="flex flex-col">
+<span class="text-sm font-bold text-slate-900 dark:text-white">Guest Contributor</span>
+<span class="text-xs text-slate-500 mt-0.5 tracking-tight">external_node</span>
+</div>
+</td>
+<td class="px-6 py-5">
+<p class="text-sm text-slate-600 dark:text-slate-400 line-clamp-2">Submit draft content for review. No direct publishing rights allowed.</p>
+</td>
+<td class="px-6 py-5">
+<div class="flex flex-wrap gap-1.5">
+<span class="px-2 py-1 bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 text-[10px] font-bold rounded">DRAFT_ONLY</span>
+</div>
+</td>
+<td class="px-6 py-5 text-center">
+<span class="text-sm font-bold text-slate-700 dark:text-slate-300">96</span>
+</td>
+<td class="px-6 py-5 text-right">
+<div class="action-buttons flex justify-end gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+<button class="p-2 hover:bg-primary/10 text-slate-400 hover:text-primary rounded-lg">
+<span class="material-symbols-outlined !text-[18px]">edit</span>
+</button>
+<button class="p-2 hover:bg-red-50 text-slate-400 hover:text-red-500 rounded-lg">
+<span class="material-symbols-outlined !text-[18px]">delete</span>
+</button>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="px-6 py-4 bg-slate-50 dark:bg-slate-800/30 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between">
+<p class="text-xs text-slate-500 font-medium tracking-tight">Showing <span class="text-slate-900 dark:text-white font-bold">4</span> of <span class="text-slate-900 dark:text-white font-bold">8</span> roles</p>
+<div class="flex gap-2">
+<button class="px-4 py-1.5 border border-slate-200 dark:border-slate-700 rounded-lg text-xs font-bold text-slate-400 cursor-not-allowed">Previous</button>
+<button class="px-4 py-1.5 border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 rounded-lg text-xs font-bold text-slate-700 dark:text-slate-200 hover:bg-slate-50 transition-colors">Next</button>
+</div>
+</div>
+</div>
+</section>
+</main>
+</div>
+<div class="fixed bottom-6 right-6 flex items-center gap-4 bg-[#0e171b] text-white px-5 py-3 rounded-xl shadow-2xl">
+<div class="bg-emerald-500 p-1 rounded-full flex items-center justify-center">
+<span class="material-symbols-outlined !text-[16px] text-white">check</span>
+</div>
+<div class="flex flex-col">
+<p class="text-xs font-bold">Permissions Synced</p>
+<p class="text-[10px] text-slate-400">Database updated successfully</p>
+</div>
+</div>
+
+</body></html>
