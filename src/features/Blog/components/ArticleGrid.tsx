@@ -57,12 +57,13 @@ const ArticleGrid: React.FC = () => {
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-10">
                 {posts.map((post) => {
-                    const formattedDate = new Date(post.published_at).toLocaleDateString('en-US', {
+                    const dateToFormat = post.published_at || post.created_at;
+                    const formattedDate = new Date(dateToFormat).toLocaleDateString('en-US', {
                         month: 'short',
                         day: 'numeric',
                     });
 
-                    const imageUrl = post.image_url || `https://images.unsplash.com/photo-1498050108023-c5249f4df085?q=80&w=1000&auto=format&fit=crop`;
+                    const imageUrl = post.thumbnail || post.image_url || `https://images.unsplash.com/photo-1498050108023-c5249f4df085?q=80&w=1000&auto=format&fit=crop`;
 
                     return (
                         <Link key={post.id} to={`/post/${post.slug}`} className="flex flex-col gap-3 group">

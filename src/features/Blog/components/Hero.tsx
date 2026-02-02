@@ -40,7 +40,8 @@ const Hero: React.FC = () => {
     }
 
     const post = popularPostData.data;
-    const formattedDate = new Date(post.published_at).toLocaleDateString('en-US', {
+    const dateToFormat = post.published_at || new Date().toISOString();
+    const formattedDate = new Date(dateToFormat).toLocaleDateString('en-US', {
         month: 'short',
         day: 'numeric',
         year: 'numeric',
