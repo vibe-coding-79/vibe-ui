@@ -1,9 +1,13 @@
 import React from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, Link } from 'react-router-dom';
+import { usePostsByCategory } from '@/features/Blog/hooks/usePosts';
 
 const CategoryPage: React.FC = () => {
     const { slug } = useParams<{ slug: string }>();
-    console.log('Current category slug:', slug);
+    const { data: postsData, isLoading, error } = usePostsByCategory(slug || '');
+
+    const posts = postsData?.data || [];
+    const categoryName = slug ? slug.charAt(0).toUpperCase() + slug.slice(1) : 'Category';
 
     return (
         <div className="bg-background-light dark:bg-background-dark text-[#0d141b] dark:text-white font-display flex flex-col min-h-screen overflow-x-hidden">
@@ -12,17 +16,17 @@ const CategoryPage: React.FC = () => {
                 <div className="px-4 lg:px-10 py-3 mx-auto max-w-[1440px]">
                     <div className="flex items-center justify-between">
                         <div className="flex items-center gap-8">
-                            <div className="flex items-center gap-4 text-[#0d141b] dark:text-white">
+                            <Link to="/" className="flex items-center gap-4 text-[#0d141b] dark:text-white">
                                 <div className="size-8 text-primary">
                                     <svg fill="currentColor" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
                                         <path d="M24 45.8096C19.6865 45.8096 15.4698 44.5305 11.8832 42.134C8.29667 39.7376 5.50128 36.3314 3.85056 32.3462C2.19985 28.361 1.76794 23.9758 2.60947 19.7452C3.451 15.5145 5.52816 11.6284 8.57829 8.5783C11.6284 5.52817 15.5145 3.45101 19.7452 2.60948C23.9758 1.76795 28.361 2.19986 32.3462 3.85057C36.3314 5.50129 39.7376 8.29668 42.134 11.8833C44.5305 15.4698 45.8096 19.6865 45.8096 24L24 24L24 45.8096Z"></path>
                                     </svg>
                                 </div>
                                 <h2 className="text-xl font-bold leading-tight tracking-tight">BlogSpace</h2>
-                            </div>
+                            </Link>
                             <nav className="hidden md:flex items-center gap-6">
-                                <a className="text-sm font-medium hover:text-primary transition-colors" href="#">Home</a>
-                                <a className="text-sm font-medium hover:text-primary transition-colors text-primary" href="#">Categories</a>
+                                <Link className="text-sm font-medium hover:text-primary transition-colors" to="/">Home</Link>
+                                <Link className="text-sm font-medium hover:text-primary transition-colors text-primary" to={`/category/${slug}`}>Categories</Link>
                                 <a className="text-sm font-medium hover:text-primary transition-colors" href="#">About</a>
                                 <a className="text-sm font-medium hover:text-primary transition-colors" href="#">Contact</a>
                             </nav>
@@ -50,231 +54,108 @@ const CategoryPage: React.FC = () => {
                 <div className="max-w-[1200px] mx-auto px-4 md:px-8 py-8 md:py-12">
                     {/* Breadcrumbs */}
                     <div className="flex flex-wrap gap-2 text-sm text-[#4c739a] mb-6">
-                        <a className="hover:text-primary transition-colors" href="#">Home</a>
+                        <Link className="hover:text-primary transition-colors" to="/">Home</Link>
                         <span>/</span>
-                        <a className="hover:text-primary transition-colors" href="#">Blog</a>
+                        <Link className="hover:text-primary transition-colors" to="/">Blog</Link>
                         <span>/</span>
-                        <span className="text-[#0d141b] dark:text-white font-medium uppercase">{slug || 'Engineering'}</span>
+                        <span className="text-[#0d141b] dark:text-white font-medium uppercase">{categoryName}</span>
                     </div>
                     {/* Page Header */}
                     <div className="flex flex-col md:flex-row justify-between items-start md:items-end gap-6 mb-10 border-b border-[#e7edf3] dark:border-[#2a3b4d] pb-8">
                         <div className="flex flex-col gap-3 max-w-2xl">
-                            <h1 className="text-4xl md:text-5xl font-black tracking-tight text-[#0d141b] dark:text-white uppercase">{slug || 'Engineering'}</h1>
-                            <p className="text-lg text-[#4c739a] dark:text-gray-400">Deep dives into software architecture, coding best practices, and system design for the modern web.</p>
-                        </div>
-                        {/* Chips / Filters */}
-                        <div className="flex gap-2 flex-wrap">
-                            <button className="flex h-9 items-center justify-center gap-x-2 rounded-full bg-[#e7edf3] dark:bg-[#2a3b4d] px-4 hover:bg-primary hover:text-white transition-all group">
-                                <span className="text-sm font-medium">All</span>
-                            </button>
-                            <button className="flex h-9 items-center justify-center gap-x-2 rounded-full bg-white dark:bg-[#1a2632] border border-[#e7edf3] dark:border-[#2a3b4d] px-4 hover:border-primary hover:text-primary transition-all">
-                                <span className="text-sm font-medium">Backend</span>
-                            </button>
-                            <button className="flex h-9 items-center justify-center gap-x-2 rounded-full bg-white dark:bg-[#1a2632] border border-[#e7edf3] dark:border-[#2a3b4d] px-4 hover:border-primary hover:text-primary transition-all">
-                                <span className="text-sm font-medium">Frontend</span>
-                            </button>
-                            <button className="flex h-9 items-center justify-center gap-x-2 rounded-full bg-white dark:bg-[#1a2632] border border-[#e7edf3] dark:border-[#2a3b4d] px-4 hover:border-primary hover:text-primary transition-all">
-                                <span className="text-sm font-medium">DevOps</span>
-                            </button>
+                            <h1 className="text-4xl md:text-5xl font-black tracking-tight text-[#0d141b] dark:text-white uppercase">{categoryName}</h1>
+                            <p className="text-lg text-[#4c739a] dark:text-gray-400">
+                                {isLoading ? 'Loading articles...' : `Showing ${posts.length} article${posts.length !== 1 ? 's' : ''}`}
+                            </p>
                         </div>
                     </div>
                     {/* Main Content Layout */}
                     <div className="flex flex-col lg:flex-row gap-12">
                         {/* Left Column: Articles Grid */}
                         <div className="flex-1">
-                            {/* Sorting Toolbar */}
-                            <div className="flex justify-between items-center mb-8">
-                                <p className="text-[#4c739a] dark:text-gray-400 text-sm font-medium">Showing 12 articles</p>
-                                <div className="flex items-center gap-3">
-                                    <span className="text-[#0d141b] dark:text-white text-sm font-medium hidden sm:inline">Sort by:</span>
-                                    <div className="relative">
-                                        <select className="appearance-none bg-white dark:bg-[#1a2632] border border-[#cfdbe7] dark:border-[#2a3b4d] text-[#0d141b] dark:text-white text-sm rounded-lg pl-3 pr-8 py-2 focus:ring-primary focus:border-primary cursor-pointer">
-                                            <option>Newest First</option>
-                                            <option>Oldest First</option>
-                                            <option>Most Popular</option>
-                                        </select>
-                                        <span className="material-symbols-outlined absolute right-2 top-1/2 -translate-y-1/2 pointer-events-none text-[#4c739a] text-[18px]">expand_more</span>
-                                    </div>
-                                    <div className="hidden sm:flex border border-[#cfdbe7] dark:border-[#2a3b4d] rounded-lg overflow-hidden ml-2">
-                                        <button className="p-2 bg-[#e7edf3] dark:bg-[#2a3b4d] text-primary">
-                                            <span className="material-symbols-outlined text-[20px]">grid_view</span>
-                                        </button>
-                                        <button className="p-2 bg-white dark:bg-[#1a2632] text-[#4c739a] hover:bg-gray-50 dark:hover:bg-[#202e3b]">
-                                            <span className="material-symbols-outlined text-[20px]">view_list</span>
-                                        </button>
-                                    </div>
+                            {isLoading && (
+                                <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12">
+                                    {[1, 2, 3, 4].map((i) => (
+                                        <div key={i} className="flex flex-col gap-3 animate-pulse">
+                                            <div className="w-full h-56 bg-slate-200 dark:bg-slate-700 rounded-xl"></div>
+                                            <div className="flex flex-col gap-2 p-5">
+                                                <div className="flex gap-2">
+                                                    <div className="h-4 w-16 bg-slate-200 dark:bg-slate-700 rounded"></div>
+                                                    <div className="h-4 w-12 bg-slate-200 dark:bg-slate-700 rounded"></div>
+                                                </div>
+                                                <div className="h-6 w-full bg-slate-200 dark:bg-slate-700 rounded"></div>
+                                                <div className="h-4 w-3/4 bg-slate-200 dark:bg-slate-700 rounded mt-1"></div>
+                                            </div>
+                                        </div>
+                                    ))}
                                 </div>
-                            </div>
-                            {/* Featured Post (Optional Large Card) */}
-                            <article className="group mb-12 bg-white dark:bg-[#1a2632] rounded-2xl overflow-hidden shadow-sm hover:shadow-md transition-all border border-[#e7edf3] dark:border-[#2a3b4d] grid md:grid-cols-2">
-                                <div className="relative h-64 md:h-auto overflow-hidden">
-                                    <img alt="Abstract visualization of a futuristic data center with blue neon lights" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAcOhX20OS_Ge4nHmFmMWHzxDKlpDJBHAlmqRYlvJEVlXwFVRRHIawNA-zj_2_HWSBEj8gkhbBQL-q1HdrA-0FZH457TGQZG8WKv7ZykPWNBNvuaBMpX-YSBaF5ySlGPWtNITUqCDXDCuh-gFMUF0nDxQtFoasC5O9rTEvqNDgu4zDuZ_--R3XjBqzJ9HNyLy5qn87-jaah_dX5GFt52-Hk_tm4QmHbbeO5lZUMf5cgQzxzxdK0IpjnSOvdJeuofialt6184mdX8g" />
-                                    <div className="absolute top-4 left-4">
-                                        <span className="bg-primary text-white text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wide">Featured</span>
-                                    </div>
+                            )}
+
+                            {error && (
+                                <div className="flex flex-col items-center justify-center p-12 bg-slate-50 dark:bg-slate-800/50 rounded-xl border border-dashed border-slate-200 dark:border-slate-700">
+                                    <p className="text-slate-500 dark:text-slate-400 font-medium">Failed to load articles. Please try again later.</p>
                                 </div>
-                                <div className="p-6 md:p-8 flex flex-col justify-center">
-                                    <div className="flex items-center gap-3 text-xs text-[#4c739a] font-medium mb-3">
-                                        <span>Oct 24, 2023</span>
-                                        <span className="w-1 h-1 rounded-full bg-[#cfdbe7]"></span>
-                                        <span>Sarah Jenkins</span>
-                                    </div>
-                                    <h2 className="text-2xl font-bold text-[#0d141b] dark:text-white mb-3 leading-tight group-hover:text-primary transition-colors">
-                                        <a href="#">The Future of Microservices: Scaling Beyond the Monolith</a>
-                                    </h2>
-                                    <p className="text-[#4c739a] dark:text-gray-400 mb-6 line-clamp-3">
-                                        As systems grow, complexity increases. Discover how the latest architectural patterns are solving the scalability challenges of the next decade, moving beyond traditional microservices into composable architectures.
-                                    </p>
-                                    <a className="inline-flex items-center text-primary font-bold text-sm hover:underline decoration-2 underline-offset-4" href="#">
-                                        Read Article
-                                        <span className="material-symbols-outlined text-[18px] ml-1">arrow_forward</span>
-                                    </a>
+                            )}
+
+                            {!isLoading && !error && posts.length === 0 && (
+                                <div className="flex flex-col items-center justify-center p-12 bg-slate-50 dark:bg-slate-800/50 rounded-xl border border-dashed border-slate-200 dark:border-slate-700">
+                                    <p className="text-slate-500 dark:text-slate-400 font-medium">No articles found in this category.</p>
                                 </div>
-                            </article>
-                            {/* Article Grid */}
-                            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12">
-                                {/* Post Card 1 */}
-                                <article className="group bg-white dark:bg-[#1a2632] rounded-xl overflow-hidden shadow-sm hover:shadow-md transition-all border border-[#e7edf3] dark:border-[#2a3b4d] flex flex-col h-full">
-                                    <div className="relative h-56 overflow-hidden">
-                                        <img alt="Close up of a computer chip with intricate circuitry" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" src="https://lh3.googleusercontent.com/aida-public/AB6AXuD4hdYeHW7HsvRyEntZaBp8bsKC5JWg5HEfMb5h6Kw_Cv05Guz-zGKSaK3OooT-TI6d46fA3ZcID2GHQbFaOjthyVMoaDzdUQckEs6seRXEisgspkW8B8sGimtDxxr5cqhZ-lUfSXFqgC7m5JKujrLml6mNb4JpkRLGfUTKS68bcWNANoUcpBtbp3Kk2WYwOnRLaSB34cs5Nxz63sViBNYXOMApsDa_uuKQlx0vyAx05Zx4ajela68LxXexa3Pje_n5iaC-FzZLgw" />
-                                        <div className="absolute top-3 left-3">
-                                            <span className="bg-white/90 dark:bg-black/80 backdrop-blur-sm text-[#0d141b] dark:text-white text-xs font-bold px-2 py-1 rounded">Hardware</span>
-                                        </div>
+                            )}
+
+                            {!isLoading && !error && posts.length > 0 && (
+                                <>
+                                    {/* Article Grid */}
+                                    <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12">
+                                        {posts.map((post) => {
+                                            const formattedDate = new Date(post.published_at).toLocaleDateString('en-US', {
+                                                month: 'short',
+                                                day: 'numeric',
+                                                year: 'numeric',
+                                            });
+                                            const imageUrl = post.image_url || `https://images.unsplash.com/photo-1498050108023-c5249f4df085?q=80&w=1000&auto=format&fit=crop`;
+
+                                            return (
+                                                <article key={post.id} className="group bg-white dark:bg-[#1a2632] rounded-xl overflow-hidden shadow-sm hover:shadow-md transition-all border border-[#e7edf3] dark:border-[#2a3b4d] flex flex-col h-full">
+                                                    <div className="relative h-56 overflow-hidden">
+                                                        <img
+                                                            alt={post.title}
+                                                            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                                                            src={imageUrl}
+                                                        />
+                                                        <div className="absolute top-3 left-3">
+                                                            <span className="bg-white/90 dark:bg-black/80 backdrop-blur-sm text-[#0d141b] dark:text-white text-xs font-bold px-2 py-1 rounded">
+                                                                {post.category_name || categoryName}
+                                                            </span>
+                                                        </div>
+                                                    </div>
+                                                    <div className="p-5 flex flex-col flex-1">
+                                                        <div className="flex items-center gap-2 text-xs text-[#4c739a] mb-2">
+                                                            <span>{formattedDate}</span>
+                                                        </div>
+                                                        <h3 className="text-xl font-bold text-[#0d141b] dark:text-white mb-2 leading-snug group-hover:text-primary transition-colors">
+                                                            <Link to={`/post/${post.slug}`}>{post.title}</Link>
+                                                        </h3>
+                                                        <p className="text-[#4c739a] dark:text-gray-400 text-sm mb-4 line-clamp-2 flex-1">
+                                                            {post.content_snippet}
+                                                        </p>
+                                                        <div className="pt-4 mt-auto border-t border-[#e7edf3] dark:border-[#2a3b4d] flex items-center justify-between">
+                                                            <div className="flex items-center gap-2">
+                                                                <span className="text-xs font-medium text-[#0d141b] dark:text-white">
+                                                                    {post.author_name || 'Anonymous'}
+                                                                </span>
+                                                            </div>
+                                                            <Link to={`/post/${post.slug}`} className="text-primary hover:text-primary/80">
+                                                                <span className="material-symbols-outlined text-[20px]">arrow_outward</span>
+                                                            </Link>
+                                                        </div>
+                                                    </div>
+                                                </article>
+                                            );
+                                        })}
                                     </div>
-                                    <div className="p-5 flex flex-col flex-1">
-                                        <div className="flex items-center gap-2 text-xs text-[#4c739a] mb-2">
-                                            <span>Sep 12, 2023</span>
-                                            <span>•</span>
-                                            <span>5 min read</span>
-                                        </div>
-                                        <h3 className="text-xl font-bold text-[#0d141b] dark:text-white mb-2 leading-snug group-hover:text-primary transition-colors">
-                                            <a href="#">Optimizing React Performance for Low-End Devices</a>
-                                        </h3>
-                                        <p className="text-[#4c739a] dark:text-gray-400 text-sm mb-4 line-clamp-2 flex-1">
-                                            Learn actionable techniques to reduce bundle size and improve TTI for users on restricted networks and devices.
-                                        </p>
-                                        <div className="pt-4 mt-auto border-t border-[#e7edf3] dark:border-[#2a3b4d] flex items-center justify-between">
-                                            <div className="flex items-center gap-2">
-                                                <img className="w-6 h-6 rounded-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBQXunPl4_u3jRx9a_7PPvowxHTSIavlEfdPA3xy1azEF6BjSmzAs7aqKbc4E5BRNsxob8ew_1y00qvF6NIcDoIbiFQElFN1YkacFAr9xgHdO1xPTI2Com6tZQU_byqZ8g-io9OvvgUtCZOn60B7IiIzn1Qe-UDXNYeIHhhwamJwKxbyUA2IWqeSzLRmKWxxP7BgsqfB8yQ2ekF8zx2K7dFneUkpUphBfIP2FIkusd7cLKf13lN8o8F6dyqkW9A2f3uIvr0RaVYEA" />
-                                                <span className="text-xs font-medium text-[#0d141b] dark:text-white">John Smith</span>
-                                            </div>
-                                            <span className="text-primary hover:text-primary/80">
-                                                <span className="material-symbols-outlined text-[20px]">arrow_outward</span>
-                                            </span>
-                                        </div>
-                                    </div>
-                                </article>
-                                {/* Post Card 2 */}
-                                <article className="group bg-white dark:bg-[#1a2632] rounded-xl overflow-hidden shadow-sm hover:shadow-md transition-all border border-[#e7edf3] dark:border-[#2a3b4d] flex flex-col h-full">
-                                    <div className="relative h-56 overflow-hidden">
-                                        <img alt="Computer screen displaying lines of programming code" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" src="https://lh3.googleusercontent.com/aida-public/AB6AXuD55ZT6BVpfUtvdhryWwn1vc3A6nJN5zxXQYu2KLoZ663lpg-Jrfe2vCKHjDphrl6i1qn26ziKUTLP21ZptZ01xiuGMQb2_O21Vm11byM-OD4RC0ek6T5H_WcvQvG_jNT3L5qsfREoEjHMZtgWEYJ6MR4-00dl15Pf_FmaLZx6099abDSD6Ps9on0mo8yrsQkTzBMPgX7a3WMs6NZFwAapXSKLSZDvLzV5_UynrNeQ_rJTyz0oZC45Y729eSaIj6_TBB6dZE1jIgw" />
-                                        <div className="absolute top-3 left-3">
-                                            <span className="bg-white/90 dark:bg-black/80 backdrop-blur-sm text-[#0d141b] dark:text-white text-xs font-bold px-2 py-1 rounded">DevOps</span>
-                                        </div>
-                                    </div>
-                                    <div className="p-5 flex flex-col flex-1">
-                                        <div className="flex items-center gap-2 text-xs text-[#4c739a] mb-2">
-                                            <span>Aug 30, 2023</span>
-                                            <span>•</span>
-                                            <span>8 min read</span>
-                                        </div>
-                                        <h3 className="text-xl font-bold text-[#0d141b] dark:text-white mb-2 leading-snug group-hover:text-primary transition-colors">
-                                            <a href="#">CI/CD Pipelines: A Beginner's Guide to Automation</a>
-                                        </h3>
-                                        <p className="text-[#4c739a] dark:text-gray-400 text-sm mb-4 line-clamp-2 flex-1">
-                                            Automate your deployment workflow with GitHub Actions and Docker. A step-by-step tutorial.
-                                        </p>
-                                        <div className="pt-4 mt-auto border-t border-[#e7edf3] dark:border-[#2a3b4d] flex items-center justify-between">
-                                            <div className="flex items-center gap-2">
-                                                <img className="w-6 h-6 rounded-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDTA7egiaeFkqpQywMH2j90Axwq_BacONXRCXEBOJIfmr5PRWrP2rd0z-IPvu77_BloTGJ4atkPwMq5nvLNxs7G_loH8FwfKnUGxyeDtuH1Pv7JHZXIJLGjFEobHgWNJ7-KpweSIkR3zznRWEM336YRg70QJRPMPvo_CRo0dMcUWgA4IwHYPRveNREBNkT8ny2r2gVoeAcCPp9VTK-Q6p9lomxgdjuzzP3io0HjspGDLEkf1EHDMUoj8YSoRbj3LrBe-WMZS2elyw" />
-                                                <span className="text-xs font-medium text-[#0d141b] dark:text-white">Alice Chen</span>
-                                            </div>
-                                            <span className="text-primary hover:text-primary/80">
-                                                <span className="material-symbols-outlined text-[20px]">arrow_outward</span>
-                                            </span>
-                                        </div>
-                                    </div>
-                                </article>
-                                {/* Post Card 3 */}
-                                <article className="group bg-white dark:bg-[#1a2632] rounded-xl overflow-hidden shadow-sm hover:shadow-md transition-all border border-[#e7edf3] dark:border-[#2a3b4d] flex flex-col h-full">
-                                    <div className="relative h-56 overflow-hidden">
-                                        <img alt="Server room with rows of black server racks" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCkY_AFScEP6q1vKQZc76rAs_TzysEtykVvNuG3lD5kzseVrtPo8-9BZO12U88kUmFkEFoByn5aST51C7bErzVsxf_Kix3pENYjmxMzL_wvnAIm3rlu2WUQ67jxcmdYQcO8J4-Dg1BUvu6SvgqTfjxoHg8Jqg6jc5PYvlaer196z7l87hbnzJ0MEvr3Kx4AwIuwbZfPw4pk5eQ70t55xWrVhbR6n6ciwUJpwV7-Nxf-RGglgBe961EsiBsKoYh4sHDp5zTW2FNvtw" />
-                                        <div className="absolute top-3 left-3">
-                                            <span className="bg-white/90 dark:bg-black/80 backdrop-blur-sm text-[#0d141b] dark:text-white text-xs font-bold px-2 py-1 rounded">Backend</span>
-                                        </div>
-                                    </div>
-                                    <div className="p-5 flex flex-col flex-1">
-                                        <div className="flex items-center gap-2 text-xs text-[#4c739a] mb-2">
-                                            <span>Aug 15, 2023</span>
-                                            <span>•</span>
-                                            <span>12 min read</span>
-                                        </div>
-                                        <h3 className="text-xl font-bold text-[#0d141b] dark:text-white mb-2 leading-snug group-hover:text-primary transition-colors">
-                                            <a href="#">Database Sharding vs Partitioning Explained</a>
-                                        </h3>
-                                        <p className="text-[#4c739a] dark:text-gray-400 text-sm mb-4 line-clamp-2 flex-1">
-                                            Understanding the difference between horizontal and vertical scaling strategies for high-volume databases.
-                                        </p>
-                                        <div className="pt-4 mt-auto border-t border-[#e7edf3] dark:border-[#2a3b4d] flex items-center justify-between">
-                                            <div className="flex items-center gap-2">
-                                                <img className="w-6 h-6 rounded-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuB_YBRRfDOrMxA-XRdkTFIgSaRDN5DrJ-UTbI4IFoyVBkxnv3d6oLUbWcfQO_9VY5mj9cG8m4ssz66NPJprEGRih2YfoCgt5phDyA4IlMRJTcqhFcT2HkwgVeO3Z4Y0u1WMpqWUVkQR-ZtXTcFB3F7828QkBZkcalHiAPC83hkLyyE9w3HL1B5ECvgCtzp5IGvhmUHMmcPDbNAURYjPQolIj2dJAkveIkthn06VGjfuBlyiEFaAif-Pgxv8xDHnK2trVqhnTXUgRg" />
-                                                <span className="text-xs font-medium text-[#0d141b] dark:text-white">Robert Fox</span>
-                                            </div>
-                                            <span className="text-primary hover:text-primary/80">
-                                                <span className="material-symbols-outlined text-[20px]">arrow_outward</span>
-                                            </span>
-                                        </div>
-                                    </div>
-                                </article>
-                                {/* Post Card 4 */}
-                                <article className="group bg-white dark:bg-[#1a2632] rounded-xl overflow-hidden shadow-sm hover:shadow-md transition-all border border-[#e7edf3] dark:border-[#2a3b4d] flex flex-col h-full">
-                                    <div className="relative h-56 overflow-hidden">
-                                        <div className="absolute inset-0 bg-gradient-to-tr from-blue-600 to-purple-500 group-hover:scale-105 transition-transform duration-500" data-alt="Abstract gradient background in blue and purple"></div>
-                                        <div className="absolute inset-0 flex items-center justify-center">
-                                            <span className="material-symbols-outlined text-white text-6xl opacity-50">code</span>
-                                        </div>
-                                        <div className="absolute top-3 left-3">
-                                            <span className="bg-white/90 dark:bg-black/80 backdrop-blur-sm text-[#0d141b] dark:text-white text-xs font-bold px-2 py-1 rounded">Career</span>
-                                        </div>
-                                    </div>
-                                    <div className="p-5 flex flex-col flex-1">
-                                        <div className="flex items-center gap-2 text-xs text-[#4c739a] mb-2">
-                                            <span>Jul 22, 2023</span>
-                                            <span>•</span>
-                                            <span>6 min read</span>
-                                        </div>
-                                        <h3 className="text-xl font-bold text-[#0d141b] dark:text-white mb-2 leading-snug group-hover:text-primary transition-colors">
-                                            <a href="#">Navigating the Senior Engineer Interview Process</a>
-                                        </h3>
-                                        <p className="text-[#4c739a] dark:text-gray-400 text-sm mb-4 line-clamp-2 flex-1">
-                                            System design rounds can be daunting. Here is my framework for acing the architectural interview.
-                                        </p>
-                                        <div className="pt-4 mt-auto border-t border-[#e7edf3] dark:border-[#2a3b4d] flex items-center justify-between">
-                                            <div className="flex items-center gap-2">
-                                                <img className="w-6 h-6 rounded-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuD-697IF9ZxX3gpOg3RwJlZsLcMjIl_5tfZq2SRxcp874d_bEbNhGjFLvuJA-PQv6WrLCUpoYuO6Na6FL9dFuEzjsi-Fxu3DpI2lBd0BpEOqh0Lu-mz9CQ2hw38OF5FD9icMiuj7G5nFyi2xLPnusoG89uNNzdcdb_M02zAiEY87xWkzQrsm6mv4do4jQY5aWkLkiCLcLuGEQne4Aava-rPbNZua8vczDcVoQjgmD9lQTF9yIMGRn2CEuk3m6tPUHmjBNyNagHpBQ" />
-                                                <span className="text-xs font-medium text-[#0d141b] dark:text-white">Marcus Davis</span>
-                                            </div>
-                                            <span className="text-primary hover:text-primary/80">
-                                                <span className="material-symbols-outlined text-[20px]">arrow_outward</span>
-                                            </span>
-                                        </div>
-                                    </div>
-                                </article>
-                            </div>
-                            {/* Pagination */}
-                            <div className="flex items-center justify-center gap-2">
-                                <button className="flex items-center justify-center w-10 h-10 rounded-lg text-[#4c739a] hover:bg-[#e7edf3] dark:hover:bg-[#2a3b4d] transition-colors disabled:opacity-50" disabled>
-                                    <span className="material-symbols-outlined">chevron_left</span>
-                                </button>
-                                <button className="flex items-center justify-center w-10 h-10 rounded-lg bg-primary text-white font-medium shadow-sm">1</button>
-                                <button className="flex items-center justify-center w-10 h-10 rounded-lg text-[#0d141b] dark:text-white hover:bg-[#e7edf3] dark:hover:bg-[#2a3b4d] transition-colors font-medium">2</button>
-                                <button className="flex items-center justify-center w-10 h-10 rounded-lg text-[#0d141b] dark:text-white hover:bg-[#e7edf3] dark:hover:bg-[#2a3b4d] transition-colors font-medium">3</button>
-                                <span className="text-[#4c739a]">...</span>
-                                <button className="flex items-center justify-center w-10 h-10 rounded-lg text-[#0d141b] dark:text-white hover:bg-[#e7edf3] dark:hover:bg-[#2a3b4d] transition-colors font-medium">8</button>
-                                <button className="flex items-center justify-center w-10 h-10 rounded-lg text-[#0d141b] dark:text-white hover:bg-[#e7edf3] dark:hover:bg-[#2a3b4d] transition-colors">
-                                    <span className="material-symbols-outlined">chevron_right</span>
-                                </button>
-                            </div>
+                                </>
+                            )}
                         </div>
                         {/* Right Sidebar */}
                         <aside className="w-full lg:w-[320px] shrink-0 flex flex-col gap-8">
@@ -286,45 +167,6 @@ const CategoryPage: React.FC = () => {
                                     <input className="w-full h-10 rounded-lg border border-[#e7edf3] dark:border-[#2a3b4d] bg-background-light dark:bg-background-dark px-3 text-sm focus:ring-primary focus:border-primary" placeholder="Your email address" type="email" />
                                     <button className="w-full h-10 bg-primary text-white text-sm font-bold rounded-lg hover:bg-primary/90 transition-colors" type="submit">Subscribe</button>
                                 </form>
-                            </div>
-                            {/* Popular Tags */}
-                            <div className="bg-white dark:bg-[#1a2632] p-6 rounded-2xl border border-[#e7edf3] dark:border-[#2a3b4d]">
-                                <h3 className="text-lg font-bold text-[#0d141b] dark:text-white mb-4">Trending Topics</h3>
-                                <div className="flex flex-wrap gap-2">
-                                    <a className="px-3 py-1.5 bg-[#f6f7f8] dark:bg-[#101922] text-[#0d141b] dark:text-white text-xs font-medium rounded-lg hover:bg-[#e7edf3] dark:hover:bg-[#202e3b] transition-colors" href="#">#React</a>
-                                    <a className="px-3 py-1.5 bg-[#f6f7f8] dark:bg-[#101922] text-[#0d141b] dark:text-white text-xs font-medium rounded-lg hover:bg-[#e7edf3] dark:hover:bg-[#202e3b] transition-colors" href="#">#SystemDesign</a>
-                                    <a className="px-3 py-1.5 bg-[#f6f7f8] dark:bg-[#101922] text-[#0d141b] dark:text-white text-xs font-medium rounded-lg hover:bg-[#e7edf3] dark:hover:bg-[#202e3b] transition-colors" href="#">#Rust</a>
-                                    <a className="px-3 py-1.5 bg-[#f6f7f8] dark:bg-[#101922] text-[#0d141b] dark:text-white text-xs font-medium rounded-lg hover:bg-[#e7edf3] dark:hover:bg-[#202e3b] transition-colors" href="#">#AWS</a>
-                                    <a className="px-3 py-1.5 bg-[#f6f7f8] dark:bg-[#101922] text-[#0d141b] dark:text-white text-xs font-medium rounded-lg hover:bg-[#e7edf3] dark:hover:bg-[#202e3b] transition-colors" href="#">#Kubernetes</a>
-                                    <a className="px-3 py-1.5 bg-[#f6f7f8] dark:bg-[#101922] text-[#0d141b] dark:text-white text-xs font-medium rounded-lg hover:bg-[#e7edf3] dark:hover:bg-[#202e3b] transition-colors" href="#">#AI</a>
-                                </div>
-                            </div>
-                            {/* Top Authors */}
-                            <div className="bg-white dark:bg-[#1a2632] p-6 rounded-2xl border border-[#e7edf3] dark:border-[#2a3b4d]">
-                                <h3 className="text-lg font-bold text-[#0d141b] dark:text-white mb-4">Top Contributors</h3>
-                                <div className="flex flex-col gap-4">
-                                    <a className="flex items-center gap-3 group" href="#">
-                                        <img className="w-10 h-10 rounded-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBOvrOOBCAahuHZn09mVkxRe9aRjEa15IG4z2TAD5vcKbchINqn16P5m7j8U-2dlGW-rb92DJMgKpx05hAzjMm2wA9jLm4q8d_vxrKjX_78O2yJC5Uabrst5gf2c_u1XdNxHyG1-jrd4OlVRdzd4IpPVW7moArT3s6lQaYmQ7HpAeT1uqv1hlEgL22G8s7x187XiaHnhSZgzX1q-S__I3JHlrammU2Jfvcnj9xFHQaVX9gvNgPfPNMio0A3GUGc_N7Pc8TYLoV0iA" />
-                                        <div>
-                                            <p className="text-sm font-bold text-[#0d141b] dark:text-white group-hover:text-primary transition-colors">John Smith</p>
-                                            <p className="text-xs text-[#4c739a]">Principal Engineer</p>
-                                        </div>
-                                    </a>
-                                    <a className="flex items-center gap-3 group" href="#">
-                                        <img className="w-10 h-10 rounded-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDqKhE3a4M3AnHY3qnR61d_lObOF5SkrH4q3zJiQCLyWQtl3-1tY5H5Zstu35QKrM7Aa1vxBEU-GrRqpFDqI4Y_cd3vPgkTjbL1a_Ibfk6Ef50ZOEB4Nqkl2Z4vMPXx8CchbM-U6Qh8hzvoJuKQhfdhKlpgb6w9jqj4QhMZDMo5GDpbzZYESGIFdiEWwxhhGKl87_s27GOTxlC08WL-JYk495M-eGdhroHYBHMU4Wo_lbkfEqgDeoKC_py1tvAvAD38pWkPemjV6Q" />
-                                        <div>
-                                            <p className="text-sm font-bold text-[#0d141b] dark:text-white group-hover:text-primary transition-colors">Alice Chen</p>
-                                            <p className="text-xs text-[#4c739a]">DevOps Lead</p>
-                                        </div>
-                                    </a>
-                                    <a className="flex items-center gap-3 group" href="#">
-                                        <img className="w-10 h-10 rounded-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBZAqkWFoaz3zQeJ3c9GUvW2p5cJoZiYyO7W-kW8KAmuKBLe60zY55_06vYP0ADPTE0yQbXRIg9QscpTxVfXN_kzcx1KvnJP16Zhg_Mi13lw8BDdCzOScySpifVlaQ15pAA0qE8jW0lwPOa9F-PdyQYLEZ4zZPQcZv7SHydjWL2zrdFqF2lTuQPZZPE0OdjJtJEno4NoKFlLanmRf47GmRHSNlxq5NnK5RmVz6nqX-XrfkhwgsL5FMUSLqDx0SGD6U4UXtcwH6D6g" />
-                                        <div>
-                                            <p className="text-sm font-bold text-[#0d141b] dark:text-white group-hover:text-primary transition-colors">Robert Fox</p>
-                                            <p className="text-xs text-[#4c739a]">Database Specialist</p>
-                                        </div>
-                                    </a>
-                                </div>
                             </div>
                         </aside>
                     </div>

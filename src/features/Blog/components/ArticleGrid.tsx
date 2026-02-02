@@ -1,88 +1,101 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-
-const articles = [
-    {
-        category: 'Productivity',
-        date: 'Nov 12',
-        title: '10 Tips for Efficient Remote Work',
-        description: 'Mastering the art of working from home requires discipline, the right tools, and a designated workspace.',
-        image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuBdSSGSqbX9Y_klIqSuSnNZFWiUpR76H7T3Jm6AXiNQCdRExeXUCPB2aRFsOtyvVpyoaDEDZ5_5uCle4_Ccys9uAvYHSUm1AQuD9WyQattPtNUghoHvhf7TuviqENYQ9-4cU141BvlY-K8vRDQevxO2QiTog-v-gcpU1ptCQjNaBdrq1VwcRTfssYYDcDq3sX5f8zeouiu0uMZriYEcgZ5M2OLai8LojN61-7v8TG5_TUiSy1SOp0H2MKPLzJZuP75Tr_6oKR0Skw',
-    },
-    {
-        category: 'Design',
-        date: 'Nov 10',
-        title: 'Minimalism in Web Development',
-        description: 'Why less is more when it comes to code, user interface, and overall user experience.',
-        image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuC-8WmFsXV214OT6PMN_iwAIpGPqkuKtDQCEviMvjaBVsjGimTKKTs9pL0e1YIBo5qD48gzkDSA7nRYCA_BP1iq7nLOkecqCft1jbbKe-_PN8l6uFEtL_QqjYK7vLXKIFOQs5wVWXvjXCvh6tqnYHVOz21ofcG6P-KyQi7lTuxEGJrd7fihsUvFs5NvgsBiXve9j7bm1nVDgpcfqtsi4vZhcFqxg6p5ySAFhA8oGOSHex_17vu2w8seE4U0AKnfro-IqqHYLxn4Ew',
-    },
-    {
-        category: 'Design',
-        date: 'Nov 08',
-        title: 'Understanding Color Theory',
-        description: 'How to choose the right palette for your brand and evoke the correct emotions in your users.',
-        image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuCbRA1Ipw2n5nolOFGPAxbv0Idw2uK8llyp29ce1yeTCuKS4pE_xIFvo7SN9d7v9LDcxNre-ak05Y_SQPcRURdAXy06qinrQIi0C0zeBLzpD_Xj339s2Nq-QEVPj3Sak9Ntn-d1MIax8cpVE4T9k_hh4FvNOG4JWdebOdfnKhXF3EnjhuZF-C4XNaXDtl2tsfX6JG47Zhlcqa5Sms2quXq4z7hcWkMLDXrtPZZ8KNr1qkeWf2FVQF5lGnmhTGYniXeDejQ4pe02TA',
-    },
-    {
-        category: 'Tech',
-        date: 'Nov 05',
-        title: 'The Rise of No-Code Tools',
-        description: 'Building complex applications without writing a single line of code is becoming a reality.',
-        image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuDcs2bs66JInt6q0UalDVIj1IbnX6UNRoLV1Xr5XyPLtCF-8uYlpjDj3OusDXMx_IIGFHgZc4pBHfa3JJPqPf4DNAa4Gs27RRnlKQiAHlZNVOnIm6dmGxvZ95OhIjwZUERyHgy_VJZ8vCTBETHg7BmSdBDD-rBesmEeCVHeVLkUiDniRkU1mBa9uhxeSmSzjMg4sRgeAh8j9YFdnhJla2G54_XW3Z1N__aUmjkTc6gqMb9Wm-NMPd74uXN-VNmnt4hwHmriefLxbQ',
-    },
-    {
-        category: 'Environment',
-        date: 'Nov 03',
-        title: 'Sustainable Tech Innovations',
-        description: 'New technologies that are helping to reduce carbon footprints and promote green energy.',
-        image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuAx6e9GJBsEhpKAOmrPdWa1okK0cSsxFEwwyD3TaVc6Lj15E03TQpYPt1yHj698vG2I0HYK5uZ1LFhMlklCrx0MNovq6sXX55DxmtD7jnNFj-tjo_wAHqsk-8Xduc2qKN9DqP-en5Zu78hFIUQo0UbedPBc6BglXTotzX3KoYqPKxy0t5seXqeP5yRb9B30YqQL8ZGPPhrDGEsxd9SwDVyDNJD_YiALzpuOu-hMiTCyIYEOGR4_3wsHm4U2NBEyG8ZQ2ix7vd4O-g',
-    },
-    {
-        category: 'Lifestyle',
-        date: 'Nov 01',
-        title: 'Digital Nomad Life',
-        description: 'Exploring the world while maintaining a full-time career: challenges and rewards.',
-        image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuCuXgXjAd6Qe-tjdHp5VoX1SwqRsDb1ovdtKgqMcr0KNe7XyNbbnJnGQf5B3XySrO9kUlnjwI2-Xyr_Toa97r2rNAhb9rd4ST2rPVxgXwM7gVPkH7ySX9xM7ytEFZ8RmZL_su_FXCmfWJBtIqLbd1RzRdoVRQFwpVnMv11fCBSfZ_fRl3nHX-byErZMKsx9mBP15LvWypl-x-siAR2kiGpr8QPGSJeTGKEnz5S4a9ubx6FE3s0AnO7oo-fUnV7qAnshojcoDsP81g',
-    },
-];
+import { usePosts } from '../hooks/usePosts';
 
 const ArticleGrid: React.FC = () => {
+    const { data: postsData, isLoading, error } = usePosts();
+
+    if (isLoading) {
+        return (
+            <div className="flex flex-col">
+                <div className="flex items-center justify-between mb-6">
+                    <div className="h-8 w-48 bg-slate-200 dark:bg-slate-700 rounded animate-pulse"></div>
+                    <div className="h-5 w-24 bg-slate-200 dark:bg-slate-700 rounded animate-pulse hidden sm:block"></div>
+                </div>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-10">
+                    {[1, 2, 3, 4].map((i) => (
+                        <div key={i} className="flex flex-col gap-3 animate-pulse">
+                            <div className="w-full aspect-[16/10] bg-slate-200 dark:bg-slate-700 rounded-lg"></div>
+                            <div className="flex flex-col gap-2">
+                                <div className="flex gap-2">
+                                    <div className="h-4 w-16 bg-slate-200 dark:bg-slate-700 rounded"></div>
+                                    <div className="h-4 w-12 bg-slate-200 dark:bg-slate-700 rounded"></div>
+                                </div>
+                                <div className="h-6 w-full bg-slate-200 dark:bg-slate-700 rounded"></div>
+                                <div className="h-4 w-3/4 bg-slate-200 dark:bg-slate-700 rounded mt-1"></div>
+                            </div>
+                        </div>
+                    ))}
+                </div>
+            </div>
+        );
+    }
+
+    if (error) {
+        return (
+            <div className="flex flex-col items-center justify-center p-12 bg-slate-50 dark:bg-slate-800/50 rounded-xl border border-dashed border-slate-200 dark:border-slate-700">
+                <p className="text-slate-500 dark:text-slate-400 font-medium">Failed to load articles. Please try again later.</p>
+            </div>
+        );
+    }
+
+    const posts = postsData?.data || [];
+
+    if (posts.length === 0) {
+        return (
+            <div className="flex flex-col items-center justify-center p-12 bg-slate-50 dark:bg-slate-800/50 rounded-xl border border-dashed border-slate-200 dark:border-slate-700">
+                <p className="text-slate-500 dark:text-slate-400 font-medium">No articles found.</p>
+            </div>
+        );
+    }
+
     return (
         <div className="flex flex-col">
             <div className="flex items-center justify-between mb-6">
                 <h2 className="text-[#0d141b] dark:text-white tracking-tight text-2xl font-bold leading-tight">Recent Articles</h2>
-                <a className="text-sm font-medium text-primary hover:text-blue-600 hidden sm:block" href="#">View all posts</a>
+                <Link className="text-sm font-medium text-primary hover:text-blue-600 hidden sm:block" to="/posts">View all posts</Link>
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-10">
-                {articles.map((article, index) => (
-                    <Link key={index} to={`/post/${article.title.toLowerCase().replace(/ /g, '-')}`} className="flex flex-col gap-3 group">
-                        <article className="flex flex-col gap-3">
-                            <div
-                                className="w-full bg-center bg-no-repeat aspect-[16/10] bg-cover rounded-lg overflow-hidden shadow-sm transition-all duration-300 group-hover:translate-y-[-4px] group-hover:shadow-md"
-                                style={{ backgroundImage: `url("${article.image}")` }}
-                            ></div>
-                            <div className="flex flex-col gap-1">
-                                <div className="flex items-center gap-2 mb-1">
-                                    <span className="text-primary text-xs font-bold uppercase">{article.category}</span>
-                                    <span className="text-slate-400 text-xs">•</span>
-                                    <span className="text-slate-500 dark:text-slate-400 text-xs">{article.date}</span>
+                {posts.map((post) => {
+                    const formattedDate = new Date(post.published_at).toLocaleDateString('en-US', {
+                        month: 'short',
+                        day: 'numeric',
+                    });
+
+                    const imageUrl = post.image_url || `https://images.unsplash.com/photo-1498050108023-c5249f4df085?q=80&w=1000&auto=format&fit=crop`;
+
+                    return (
+                        <Link key={post.id} to={`/post/${post.slug}`} className="flex flex-col gap-3 group">
+                            <article className="flex flex-col gap-3">
+                                <div
+                                    className="w-full bg-center bg-no-repeat aspect-[16/10] bg-cover rounded-lg overflow-hidden shadow-sm transition-all duration-300 group-hover:translate-y-[-4px] group-hover:shadow-md"
+                                    style={{ backgroundImage: `url("${imageUrl}")` }}
+                                ></div>
+                                <div className="flex flex-col gap-1">
+                                    <div className="flex items-center gap-2 mb-1">
+                                        <span className="text-primary text-xs font-bold uppercase">{post.category_name || 'General'}</span>
+                                        <span className="text-slate-400 text-xs">•</span>
+                                        <span className="text-slate-500 dark:text-slate-400 text-xs">{formattedDate}</span>
+                                    </div>
+                                    <h3 className="text-[#0d141b] dark:text-white text-lg font-bold leading-tight group-hover:text-primary transition-colors">
+                                        {post.title}
+                                    </h3>
+                                    <p className="text-[#4c739a] dark:text-slate-400 text-sm font-normal leading-relaxed line-clamp-2">
+                                        {post.content_snippet}
+                                    </p>
                                 </div>
-                                <h3 className="text-[#0d141b] dark:text-white text-lg font-bold leading-tight group-hover:text-primary transition-colors">
-                                    {article.title}
-                                </h3>
-                                <p className="text-[#4c739a] dark:text-slate-400 text-sm font-normal leading-relaxed line-clamp-2">
-                                    {article.description}
-                                </p>
-                            </div>
-                        </article>
-                    </Link>
-                ))}
+                            </article>
+                        </Link>
+                    );
+                })}
             </div>
-            <div className="mt-12 flex justify-center">
-                <button className="bg-white dark:bg-slate-700 border border-slate-200 dark:border-slate-600 text-slate-700 dark:text-white font-semibold py-2 px-6 rounded-lg hover:bg-slate-50 dark:hover:bg-slate-600 transition-colors">
-                    Load More Articles
-                </button>
-            </div>
+            {posts.length >= 6 && (
+                <div className="mt-12 flex justify-center">
+                    <button className="bg-white dark:bg-slate-700 border border-slate-200 dark:border-slate-600 text-slate-700 dark:text-white font-semibold py-2 px-6 rounded-lg hover:bg-slate-50 dark:hover:bg-slate-600 transition-colors">
+                        Load More Articles
+                    </button>
+                </div>
+            )}
         </div>
     );
 };
