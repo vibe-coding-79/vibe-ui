@@ -1,98 +1,150 @@
-import React from 'react';
-import { useParams } from 'react-router-dom';
+import React, { useEffect } from 'react';
+import { useParams, Link } from 'react-router-dom';
+import MainLayout from '@/layouts/MainLayout';
+import { usePostBySlug, useRecordView } from '@/features/Blog/hooks/usePosts';
 
 const PostDetailPage: React.FC = () => {
     const { slug } = useParams<{ slug: string }>();
-    console.log('Current slug:', slug);
+    const { data: postData, isLoading, error } = usePostBySlug(slug || '');
+    const recordView = useRecordView();
 
-    return (
-        <div className="bg-background-light dark:bg-background-dark text-[#0d141b] dark:text-gray-100 font-display transition-colors duration-200 min-h-screen">
-            {/* Navbar */}
-            <header className="sticky top-0 z-50 w-full border-b border-[#e7edf3] dark:border-gray-800 bg-white dark:bg-[#1a2632]">
-                <div className="mx-auto flex h-16 max-w-[1280px] items-center justify-between px-4 sm:px-6 lg:px-8">
-                    <div className="flex items-center gap-8">
-                        <a className="flex items-center gap-2 group" href="#">
-                            <div className="flex size-8 items-center justify-center rounded-lg bg-primary text-white">
-                                <span className="material-symbols-outlined" style={{ fontSize: '24px' }}>article</span>
+    const post = postData?.data;
+
+    // Record view when post loads
+    useEffect(() => {
+        if (post?.id) {
+            // Convert string ID to number for the view tracking API
+            const numericId = parseInt(post.id.split('-')[0] || '0', 10);
+            if (numericId > 0) {
+                recordView.mutate(numericId);
+            }
+        }
+    }, [post?.id]);
+
+    // Get author full name
+    const authorName = post?.author
+        ? `${post.author.first_name} ${post.author.last_name}`
+        : post?.author_name || 'Anonymous';
+
+    // Format date - use created_at or published_at
+    const dateToFormat = post?.created_at || post?.published_at;
+    const formattedDate = dateToFormat
+        ? new Date(dateToFormat).toLocaleDateString('en-US', {
+            month: 'short',
+            day: 'numeric',
+            year: 'numeric',
+        })
+        : '';
+
+    // Calculate read time (rough estimate: 200 words per minute)
+    const calculateReadTime = (content: string) => {
+        const words = content.split(/\s+/).length;
+        const minutes = Math.ceil(words / 200);
+        return `${minutes} min read`;
+    };
+
+    if (isLoading) {
+        return (
+            <MainLayout>
+                <div className="mx-auto max-w-[1280px]">
+                    <div className="flex flex-col lg:flex-row gap-12">
+                        <article className="flex-1 min-w-0 max-w-4xl mx-auto lg:mx-0">
+                            <div className="animate-pulse space-y-6">
+                                <div className="h-4 bg-slate-200 dark:bg-slate-700 rounded w-1/3"></div>
+                                <div className="h-12 bg-slate-200 dark:bg-slate-700 rounded w-full"></div>
+                                <div className="h-6 bg-slate-200 dark:bg-slate-700 rounded w-2/3"></div>
+                                <div className="h-64 bg-slate-200 dark:bg-slate-700 rounded"></div>
+                                <div className="space-y-3">
+                                    <div className="h-4 bg-slate-200 dark:bg-slate-700 rounded"></div>
+                                    <div className="h-4 bg-slate-200 dark:bg-slate-700 rounded"></div>
+                                    <div className="h-4 bg-slate-200 dark:bg-slate-700 rounded w-5/6"></div>
+                                </div>
                             </div>
-                            <h2 className="text-lg font-bold leading-tight tracking-tight text-[#0d141b] dark:text-white group-hover:text-primary transition-colors">BlogSite</h2>
-                        </a>
-                        <nav className="hidden md:flex items-center gap-6">
-                            <a className="text-sm font-medium text-[#0d141b] dark:text-gray-300 hover:text-primary dark:hover:text-primary transition-colors" href="#">Blog</a>
-                            <a className="text-sm font-medium text-[#0d141b] dark:text-gray-300 hover:text-primary dark:hover:text-primary transition-colors" href="#">About</a>
-                            <a className="text-sm font-medium text-[#0d141b] dark:text-gray-300 hover:text-primary dark:hover:text-primary transition-colors" href="#">Contact</a>
-                        </nav>
-                    </div>
-                    <div className="flex items-center gap-4">
-                        <div className="hidden sm:flex relative">
-                            <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400">
-                                <span className="material-symbols-outlined" style={{ fontSize: '20px' }}>search</span>
-                            </span>
-                            <input
-                                className="h-10 w-64 rounded-full border border-[#e7edf3] dark:border-gray-700 bg-[#f6f7f8] dark:bg-[#101922] pl-10 pr-4 text-sm focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary dark:text-white placeholder:text-gray-500"
-                                placeholder="Search..."
-                                type="text"
-                            />
-                        </div>
-                        <button className="flex items-center justify-center rounded-full size-10 text-[#0d141b] dark:text-white hover:bg-gray-100 dark:hover:bg-gray-800 sm:hidden">
-                            <span className="material-symbols-outlined">search</span>
-                        </button>
-                        <button className="flex items-center justify-center rounded-full size-10 text-[#0d141b] dark:text-white hover:bg-gray-100 dark:hover:bg-gray-800">
-                            <span className="material-symbols-outlined">notifications</span>
-                        </button>
-                        <div className="size-8 rounded-full bg-gray-200 dark:bg-gray-700 overflow-hidden cursor-pointer">
-                            <img
-                                alt="User Profile"
-                                className="h-full w-full object-cover"
-                                src="https://lh3.googleusercontent.com/aida-public/AB6AXuAmfVsgh2rtEakfhhrHetaQcul_GzhKbi68CyP48thjuZmTRa4uHWe1It0z_ZI_fbGkkx1PIE2f5icIMl1ogu2yJXTeLwSwdOJZRdfipWa1GvJAKmQMvom0rm96Czmhg9aE7CA2ueKoQBXR0JDDjm8uZYR132uHImaIvada5ODeb7Z-aKHt-2DIF77EKOGVZTWBG0D4iRfSncl_RY6XRkCONHVDhS-twp78w1R5nKistO8pU49bfWZfBCO0BC652PNiNWgrZw4DiQ"
-                            />
-                        </div>
+                        </article>
                     </div>
                 </div>
-            </header>
+            </MainLayout>
+        );
+    }
 
+    if (error || !post) {
+        return (
+            <MainLayout>
+                <div className="mx-auto max-w-[1280px]">
+                    <div className="flex flex-col items-center justify-center py-20">
+                        <h1 className="text-3xl font-bold text-slate-900 dark:text-white mb-4">Post Not Found</h1>
+                        <p className="text-slate-600 dark:text-slate-400 mb-8">
+                            The post you're looking for doesn't exist or has been removed.
+                        </p>
+                        <Link
+                            to="/"
+                            className="px-6 py-3 bg-primary text-white rounded-lg hover:bg-primary/90 transition-colors"
+                        >
+                            Back to Home
+                        </Link>
+                    </div>
+                </div>
+            </MainLayout>
+        );
+    }
+
+    // Use thumbnail or image_url
+    const imageUrl = post.thumbnail || post.image_url || 'https://images.unsplash.com/photo-1498050108023-c5249f4df085?q=80&w=1000&auto=format&fit=crop';
+
+    return (
+        <MainLayout>
             {/* Main Content Wrapper */}
-            <main className="mx-auto max-w-[1280px] px-4 py-8 sm:px-6 lg:px-8">
+            <div className="mx-auto max-w-[1280px]">
                 <div className="flex flex-col lg:flex-row gap-12">
                     {/* Article Content (Left Column) */}
                     <article className="flex-1 min-w-0 max-w-4xl mx-auto lg:mx-0">
                         {/* Breadcrumbs */}
                         <nav className="flex items-center gap-2 text-sm text-[#4c739a] dark:text-gray-400 mb-6">
-                            <a className="hover:text-primary transition-colors" href="#">Home</a>
+                            <Link to="/" className="hover:text-primary transition-colors">Home</Link>
                             <span className="material-symbols-outlined" style={{ fontSize: '16px' }}>chevron_right</span>
-                            <a className="hover:text-primary transition-colors" href="#">Technology</a>
-                            <span className="material-symbols-outlined" style={{ fontSize: '16px' }}>chevron_right</span>
-                            <span className="font-medium text-[#0d141b] dark:text-gray-200">{slug || 'Generative Design'}</span>
+                            {post.category_name && (
+                                <>
+                                    <Link to={`/category/${post.category_name.toLowerCase()}`} className="hover:text-primary transition-colors">
+                                        {post.category_name}
+                                    </Link>
+                                    <span className="material-symbols-outlined" style={{ fontSize: '16px' }}>chevron_right</span>
+                                </>
+                            )}
+                            <span className="font-medium text-[#0d141b] dark:text-gray-200">{post.title}</span>
                         </nav>
 
                         {/* Header */}
                         <header className="mb-8">
                             <h1 className="mb-4 text-3xl font-black tracking-tight text-[#0d141b] dark:text-white sm:text-4xl lg:text-5xl leading-tight">
-                                The Future of Generative Design in 2024
+                                {post.title}
                             </h1>
-                            <p className="mb-6 text-xl text-[#4c739a] dark:text-gray-400 font-light leading-relaxed">
-                                Exploring how AI is reshaping the creative landscape for designers and developers alike, moving from manual iteration to algorithmic curation.
-                            </p>
+                            {post.content_snippet && (
+                                <p className="mb-6 text-xl text-[#4c739a] dark:text-gray-400 font-light leading-relaxed">
+                                    {post.content_snippet}
+                                </p>
+                            )}
 
                             {/* Meta Data */}
                             <div className="flex items-center gap-4 border-y border-[#e7edf3] dark:border-gray-800 py-4">
-                                <img
-                                    alt="Sarah Jenkins"
-                                    className="h-10 w-10 rounded-full object-cover"
-                                    src="https://lh3.googleusercontent.com/aida-public/AB6AXuBr-D36KdsDw4fQ94sTs8Cr4bvfVu82SDrS_Fri3_wzX0YkQS7fCh4Or-x9bPR1WfoGdFCQluRKB8PDscn2_56BuurdGzUSsu29jal4ZlK_9oO0TfjDgDTkUMhx59YwBTbY4MKz0mOykSv0GBvNKVeOlfy4GguySp5sCQXSqRJg4EDvNYgG6iRgTy4eLtHDSLXWUzMqzoD1Kiv4TlExRPPJzTgmmNRbF2NgGBO7aVvJlOnKWlVf0NVPz75A4cph_kOUZSiXoJY-2g"
-                                />
+                                <div className="h-10 w-10 rounded-full bg-primary/10 flex items-center justify-center">
+                                    <span className="text-primary font-bold">
+                                        {authorName.charAt(0).toUpperCase()}
+                                    </span>
+                                </div>
                                 <div className="flex flex-col text-sm">
-                                    <span className="font-bold text-[#0d141b] dark:text-white">Sarah Jenkins</span>
-                                    <span className="text-[#4c739a] dark:text-gray-400">Product Designer @ TechFlow</span>
+                                    <span className="font-bold text-[#0d141b] dark:text-white">
+                                        {authorName}
+                                    </span>
+                                    <span className="text-[#4c739a] dark:text-gray-400">Author</span>
                                 </div>
                                 <div className="hidden sm:flex items-center gap-4 ml-auto text-sm text-[#4c739a] dark:text-gray-400">
                                     <span className="flex items-center gap-1">
                                         <span className="material-symbols-outlined" style={{ fontSize: '18px' }}>calendar_month</span>
-                                        Oct 24, 2023
+                                        {formattedDate}
                                     </span>
                                     <span className="flex items-center gap-1">
                                         <span className="material-symbols-outlined" style={{ fontSize: '18px' }}>schedule</span>
-                                        5 min read
+                                        {calculateReadTime(post.content || '')}
                                     </span>
                                 </div>
                             </div>
@@ -102,37 +154,17 @@ const PostDetailPage: React.FC = () => {
                         <div className="mb-10 overflow-hidden rounded-xl bg-gray-100 dark:bg-gray-800 aspect-video relative group">
                             <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
                             <img
-                                alt="Abstract colorful generative art waves"
+                                alt={post.title}
                                 className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
-                                src="https://lh3.googleusercontent.com/aida-public/AB6AXuDU-doET7r0QrKTjJs2tw1udwOsr9oSFNLxTyaKiHnOlF4cPG2nZYQG3hTt8fKOFddrkuueSkFNw7dndC0LdlTrNbBwMCLkjUiK8xzRGi4p_gD8bi0Zam10YG56lCweGHAMbGYs82aNcVQAhYjfvojuBBnyLAFDri22mry1pCuKWrGXjJpGnImT-YvzIycHX7TbbXoW4SrAY4UyttRVtGNrerF7O4FYSPRO1ibMCdlbCfdMELkwIHwD6OilqG6X_NVMJOc2fvd48g"
+                                src={imageUrl}
                             />
                         </div>
 
                         {/* Article Body */}
-                        <div className="prose prose-lg prose-slate dark:prose-invert max-w-none text-[#0d141b] dark:text-gray-200 leading-8">
-                            <p className="mb-6">
-                                Generative design is not just a buzzword; it represents a fundamental shift in how we approach problem-solving in design. By leveraging machine learning algorithms and vast datasets, designers can now explore thousands of permutations of a solution in the time it used to take to draft a single concept. This isn't about replacing the designer, but rather augmenting their capability to innovate.
-                            </p>
-                            <h2 className="text-2xl font-bold mt-10 mb-4 text-[#0d141b] dark:text-white">The Algorithmic Partner</h2>
-                            <p className="mb-6">
-                                Imagine defining the parameters of a problem—weight, material constraints, cost, and structural integrity—and having a system generate hundreds of valid 3D models that meet those criteria. This is the reality today in fields ranging from architecture to industrial design. The designer's role shifts from "creator" to "curator" and "paramter setter."
-                            </p>
-                            <blockquote className="my-8 border-l-4 border-primary bg-[#e7edf3]/30 dark:bg-gray-800/50 p-6 rounded-r-lg italic text-lg text-gray-700 dark:text-gray-300">
-                                "The goal of generative design is not to automate creativity, but to remove the friction between an idea and its execution."
-                            </blockquote>
-                            <p className="mb-6">
-                                However, the integration of these tools brings new challenges. We must ask ourselves: How do we maintain a human touch in an automated world? The answer lies in the subtle imperfections and the emotional intelligence that AI currently lacks. A generative algorithm can maximize efficiency, but it cannot maximize <em>delight</em> without human guidance.
-                            </p>
-                            <h3 className="text-xl font-bold mt-8 mb-3 text-[#0d141b] dark:text-white">Tools of the Trade</h3>
-                            <ul className="list-disc pl-6 mb-6 space-y-2 marker:text-primary">
-                                <li><strong>Autodesk Fusion 360:</strong> Leading the charge in industrial manufacturing.</li>
-                                <li><strong>Midjourney &amp; DALL-E:</strong> Revolutionizing concept art and visual exploration.</li>
-                                <li><strong>RunwayML:</strong> Bringing generative capabilities to video editing and motion graphics.</li>
-                            </ul>
-                            <p className="mb-6">
-                                As we move into 2024, we expect these tools to become more accessible, moving from specialized enterprise software to browser-based utilities that any freelancer can access.
-                            </p>
-                        </div>
+                        <div
+                            className="prose prose-lg prose-slate dark:prose-invert max-w-none text-[#0d141b] dark:text-gray-200 leading-8"
+                            dangerouslySetInnerHTML={{ __html: post.content || '' }}
+                        />
 
                         {/* Tags */}
                         <div className="mt-10 flex flex-wrap gap-2">
@@ -349,21 +381,8 @@ const PostDetailPage: React.FC = () => {
                         </div>
                     </aside>
                 </div>
-            </main>
-
-            {/* Simple Footer */}
-            <footer className="mt-20 border-t border-[#e7edf3] dark:border-gray-800 bg-white dark:bg-[#1a2632] py-12">
-                <div className="mx-auto max-w-[1280px] px-4 sm:px-6 lg:px-8 text-center">
-                    <div className="flex items-center justify-center gap-2 mb-4">
-                        <div className="flex size-6 items-center justify-center rounded bg-primary text-white">
-                            <span className="material-symbols-outlined" style={{ fontSize: '16px' }}>article</span>
-                        </div>
-                        <span className="text-lg font-bold text-[#0d141b] dark:text-white">BlogSite</span>
-                    </div>
-                    <p className="text-sm text-gray-500 dark:text-gray-400">© 2024 BlogSite Inc. All rights reserved.</p>
-                </div>
-            </footer>
-        </div>
+            </div>
+        </MainLayout>
     );
 };
 

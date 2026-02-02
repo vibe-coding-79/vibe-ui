@@ -1,5 +1,5 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { createPost, recordPostView, getPosts, getPostsByCategory } from '../api/posts';
+import { createPost, recordPostView, getPosts, getPostsByCategory, getPostBySlug } from '../api/posts';
 import type { PostFormData } from '../schemas/postSchema';
 
 export const useCreatePost = () => {
@@ -32,5 +32,13 @@ export const usePostsByCategory = (categorySlug: string) => {
         queryKey: ['posts', 'category', categorySlug],
         queryFn: () => getPostsByCategory(categorySlug),
         enabled: !!categorySlug,
+    });
+};
+
+export const usePostBySlug = (slug: string) => {
+    return useQuery({
+        queryKey: ['posts', 'slug', slug],
+        queryFn: () => getPostBySlug(slug),
+        enabled: !!slug,
     });
 };

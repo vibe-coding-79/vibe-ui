@@ -108,12 +108,13 @@ const CategoryPage: React.FC = () => {
                                     {/* Article Grid */}
                                     <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12">
                                         {posts.map((post) => {
-                                            const formattedDate = new Date(post.published_at).toLocaleDateString('en-US', {
+                                            const dateToFormat = post.published_at || post.created_at;
+                                            const formattedDate = new Date(dateToFormat).toLocaleDateString('en-US', {
                                                 month: 'short',
                                                 day: 'numeric',
                                                 year: 'numeric',
                                             });
-                                            const imageUrl = post.image_url || `https://images.unsplash.com/photo-1498050108023-c5249f4df085?q=80&w=1000&auto=format&fit=crop`;
+                                            const imageUrl = post.thumbnail || post.image_url || `https://images.unsplash.com/photo-1498050108023-c5249f4df085?q=80&w=1000&auto=format&fit=crop`;
 
                                             return (
                                                 <article key={post.id} className="group bg-white dark:bg-[#1a2632] rounded-xl overflow-hidden shadow-sm hover:shadow-md transition-all border border-[#e7edf3] dark:border-[#2a3b4d] flex flex-col h-full">

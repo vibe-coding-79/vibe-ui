@@ -1,13 +1,27 @@
 import api from '@/lib/axios';
 import type { PostFormData } from '../schemas/postSchema';
 
+export interface Author {
+    id: string;
+    first_name: string;
+    last_name: string;
+}
+
 export interface Post {
-    id: number;
-    fake_id: string;
-    title: string;
-    content_snippet: string;
+    id: string;
     slug: string;
-    published_at: string;
+    title: string;
+    content?: string;
+    status?: string;
+    thumbnail?: string;
+    view_count?: number;
+    created_at: string;
+    updated_at: string;
+    author?: Author;
+    // Legacy fields for backwards compatibility
+    fake_id?: string;
+    content_snippet?: string;
+    published_at?: string;
     image_url?: string;
     category_name?: string;
     author_name?: string;
@@ -42,8 +56,8 @@ export const getPostsByCategory = async (categorySlug: string): Promise<{ data: 
     return api.get<{ data: Post[] }>(`/api/v1/posts?category=${categorySlug}`);
 };
 
-export const getPostBySlug = async (slug: string): Promise<PostResponse> => {
-    return api.get<PostResponse>(`/posts/${slug}`);
+export const getPostBySlug = async (slug: string): Promise<{ data: Post & { content: string } }> => {
+    return api.get<{ data: Post & { content: string } }>(`/api/v1/posts/${slug}`);
 };
 
 export const getPopularPost = async (): Promise<{ data: PopularPost }> => {
