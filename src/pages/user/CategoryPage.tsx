@@ -143,7 +143,7 @@ const CategoryPage: React.FC = () => {
                                         </div>
                                         <div className="p-6 md:p-8 flex flex-col justify-center">
                                             <div className="flex items-center gap-3 text-xs text-[#4c739a] font-medium mb-3">
-                                                <span>{new Date(posts[0].published_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}</span>
+                                                <span>{new Date(posts[0].published_at || posts[0].created_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}</span>
                                                 <span className="w-1 h-1 rounded-full bg-[#cfdbe7]"></span>
                                                 <span>{posts[0].author_name || 'Anonymous'}</span>
                                             </div>
@@ -164,7 +164,7 @@ const CategoryPage: React.FC = () => {
                                 {/* Article Grid */}
                                 <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12">
                                     {posts.slice(1).map((post) => {
-                                        const formattedDate = new Date(post.published_at).toLocaleDateString('en-US', {
+                                        const formattedDate = new Date(post.published_at || post.created_at).toLocaleDateString('en-US', {
                                             month: 'short',
                                             day: 'numeric',
                                             year: 'numeric',

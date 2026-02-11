@@ -83,7 +83,7 @@ const ArticleGrid: React.FC = () => {
                                         {post.title}
                                     </h3>
                                     <p className="text-[#4c739a] dark:text-slate-400 text-sm font-normal leading-relaxed line-clamp-2">
-                                        {stripHtml(post.content_snippet)}
+                                        {stripHtml(post.content_snippet || '')}
                                     </p>
                                 </div>
                             </article>
