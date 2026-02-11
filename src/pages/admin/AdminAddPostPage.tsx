@@ -3,30 +3,43 @@ import { Link } from 'react-router-dom';
 import CKEditorComponent from '@/components/Editor/CKEditorComponent';
 import { postSchema } from '@/features/Blog/schemas/postSchema';
 import { useCreatePost } from '@/features/Blog/hooks/usePosts';
+import { useCategories } from '@/features/Blog/hooks/useCategories';
 import { getErrorMessage } from '@/utils/error-handler';
+import type { CreatePostRequest } from '@/features/Blog/api/posts';
 import * as yup from 'yup';
 
 const AdminAddPostPage: React.FC = () => {
-    const [categories, setCategories] = useState([
-        { id: 'tech', name: 'Technology', checked: false },
-        { id: 'design', name: 'Design', checked: true },
-        { id: 'dev', name: 'Development', checked: false },
-        { id: 'tutorials', name: 'Tutorials', checked: false },
-    ]);
+    // Fetch categories from API
+    const { data: categoriesData, isLoading: categoriesLoading } = useCategories();
+    const categories = categoriesData?.data || [];
 
     const [title, setTitle] = useState('');
+    const [slug, setSlug] = useState('');
     const [content, setContent] = useState('');
     const [publishDate, setPublishDate] = useState('');
     const [visibility, setVisibility] = useState('Public');
+    const [selectedCategoryId, setSelectedCategoryId] = useState<string>('');
     const [tags, setTags] = useState(['UX Design', 'Web']);
     const [tagInput, setTagInput] = useState('');
     const [author, setAuthor] = useState('John Doe (You)');
     const [errors, setErrors] = useState<Record<string, string>>({});
 
-    const toggleCategory = (id: string) => {
-        setCategories(categories.map(cat =>
-            cat.id === id ? { ...cat, checked: !cat.checked } : cat
-        ));
+    // Auto-generate slug from title
+    const generateSlug = (text: string): string => {
+        return text
+            .toLowerCase()
+            .trim()
+            .replace(/[^\w\s-]/g, '')
+            .replace(/[\s_-]+/g, '-')
+            .replace(/^-+|-+$/g, '');
+    };
+
+    const handleTitleChange = (newTitle: string) => {
+        setTitle(newTitle);
+        // Auto-generate slug if it hasn't been manually edited
+        if (!slug || slug === generateSlug(title)) {
+            setSlug(generateSlug(newTitle));
+        }
     };
 
     const handleAddTag = (e: React.KeyboardEvent<HTMLInputElement>) => {
@@ -45,12 +58,14 @@ const AdminAddPostPage: React.FC = () => {
     const createPostMutation = useCreatePost();
 
     const handlePublish = async () => {
+        const selectedCategory = categories.find(cat => String(cat.id) === selectedCategoryId);
+
         const formData = {
             title,
             content,
             publishDate,
             visibility,
-            categories: categories.filter(cat => cat.checked).map(cat => cat.name),
+            categories: selectedCategory ? [selectedCategory.name] : [],
             tags,
             author,
         };
@@ -59,11 +74,34 @@ const AdminAddPostPage: React.FC = () => {
             await postSchema.validate(formData, { abortEarly: false });
             setErrors({});
 
-            createPostMutation.mutate(formData, {
-                onSuccess: (data) => {
-                    console.log('Post published successfully:', data);
-                    alert('Post published successfully!');
-                    // Optionally reset form or redirect
+            // Transform form data to API request format
+            const apiData: CreatePostRequest = {
+                slug: slug || generateSlug(title),
+                agent_id: 'admin-agent', // TODO: Get from auth context or user profile
+                title: title,
+                content: content,
+                status: visibility === 'Public' ? 'published' : 'draft',
+                ai_metadata: {
+                    category: selectedCategory?.name || '',
+                    category_id: selectedCategoryId || '',
+                    tags: tags,
+                    author: author,
+                    publishDate: publishDate || new Date().toISOString(),
+                    visibility: visibility,
+                }
+            };
+
+            createPostMutation.mutate(apiData, {
+                onSuccess: (response) => {
+                    console.log('Post published successfully:', response);
+                    alert(`Post published successfully! ID: ${response.data.id}`);
+                    // Reset form
+                    setTitle('');
+                    setSlug('');
+                    setContent('');
+                    setPublishDate('');
+                    setSelectedCategoryId('');
+                    setTags([]);
                 },
                 onError: (error) => {
                     const message = getErrorMessage(error);
@@ -151,9 +189,28 @@ const AdminAddPostPage: React.FC = () => {
                                 placeholder="Enter post title..."
                                 type="text"
                                 value={title}
-                                onChange={(e) => setTitle(e.target.value)}
+                                onChange={(e) => handleTitleChange(e.target.value)}
                             />
                             {errors.title && <p className="text-red-500 text-sm mt-2">{errors.title}</p>}
+
+                            {/* Slug Input */}
+                            <div className="mt-4 pt-4 border-t border-slate-200 dark:border-slate-700">
+                                <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">
+                                    URL Slug
+                                    <span className="ml-2 text-xs text-slate-500 dark:text-slate-400">(auto-generated from title)</span>
+                                </label>
+                                <div className="flex items-center gap-2">
+                                    <span className="text-sm text-slate-500 dark:text-slate-400">/post/</span>
+                                    <input
+                                        className="flex-1 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg px-3 py-2 text-sm text-slate-900 dark:text-white focus:ring-primary focus:border-primary"
+                                        placeholder="post-url-slug"
+                                        type="text"
+                                        value={slug}
+                                        onChange={(e) => setSlug(e.target.value)}
+                                    />
+                                </div>
+                                {errors.slug && <p className="text-red-500 text-xs mt-1">{errors.slug}</p>}
+                            </div>
                         </div>
                         {/* Refactored CKEditor Component */}
                         <div className="bg-white dark:bg-[#15202b] rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm flex flex-col min-h-[600px] overflow-hidden">
@@ -244,32 +301,24 @@ const AdminAddPostPage: React.FC = () => {
                             <div className="p-5 flex flex-col gap-6">
                                 {/* Categories */}
                                 <div>
-                                    <div className="flex items-center justify-between mb-2">
-                                        <label className="block text-sm font-medium text-slate-700 dark:text-slate-300">
-                                            Categories
-                                        </label>
-                                        <button className="text-xs text-primary font-medium hover:underline">
-                                            Add New
-                                        </button>
-                                    </div>
-                                    <div className="space-y-2 max-h-40 overflow-y-auto pr-2 custom-scrollbar">
+                                    <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">
+                                        Category
+                                    </label>
+                                    <select
+                                        className="block w-full px-3 py-2 rounded-lg border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-slate-900 dark:text-white shadow-sm focus:border-primary focus:ring-primary sm:text-sm"
+                                        value={selectedCategoryId}
+                                        onChange={(e) => setSelectedCategoryId(e.target.value)}
+                                        disabled={categoriesLoading}
+                                    >
+                                        <option value="">
+                                            {categoriesLoading ? 'Loading categories...' : 'Select a category'}
+                                        </option>
                                         {categories.map(category => (
-                                            <label
-                                                key={category.id}
-                                                className="flex items-center gap-3 p-2 rounded-lg hover:bg-slate-50 dark:hover:bg-slate-800 cursor-pointer"
-                                            >
-                                                <input
-                                                    className="h-4 w-4 rounded border-slate-300 text-primary focus:ring-primary"
-                                                    type="checkbox"
-                                                    checked={category.checked}
-                                                    onChange={() => toggleCategory(category.id)}
-                                                />
-                                                <span className="text-sm text-slate-700 dark:text-slate-300">
-                                                    {category.name}
-                                                </span>
-                                            </label>
+                                            <option key={category.id} value={category.id}>
+                                                {category.name}
+                                            </option>
                                         ))}
-                                    </div>
+                                    </select>
                                     {errors.categories && <p className="text-red-500 text-xs mt-2">{errors.categories}</p>}
                                 </div>
                                 <div className="border-t border-slate-100 dark:border-slate-800"></div>

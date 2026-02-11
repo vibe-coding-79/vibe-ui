@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { usePosts } from '../hooks/usePosts';
+import { stripHtml } from '@/utils/text';
 
 const ArticleGrid: React.FC = () => {
     const { data: postsData, isLoading, error } = usePosts();
@@ -81,7 +82,7 @@ const ArticleGrid: React.FC = () => {
                                         {post.title}
                                     </h3>
                                     <p className="text-[#4c739a] dark:text-slate-400 text-sm font-normal leading-relaxed line-clamp-2">
-                                        {post.content_snippet}
+                                        {stripHtml(post.content_snippet)}
                                     </p>
                                 </div>
                             </article>

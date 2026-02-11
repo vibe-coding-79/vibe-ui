@@ -1,12 +1,12 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { createPost, recordPostView, getPosts, getPostsByCategory } from '../api/posts';
-import type { PostFormData } from '../schemas/postSchema';
+import { createPost, recordPostView, getPosts, getPostsByCategory, getPostBySlug } from '../api/posts';
+import type { CreatePostRequest } from '../api/posts';
 
 export const useCreatePost = () => {
     const queryClient = useQueryClient();
 
     return useMutation({
-        mutationFn: (data: PostFormData) => createPost(data),
+        mutationFn: (data: CreatePostRequest) => createPost(data),
         onSuccess: () => {
             // Invalidate posts list query if it exists
             queryClient.invalidateQueries({ queryKey: ['posts'] });
@@ -32,5 +32,12 @@ export const usePostsByCategory = (categorySlug: string) => {
         queryKey: ['posts', 'category', categorySlug],
         queryFn: () => getPostsByCategory(categorySlug),
         enabled: !!categorySlug,
+    });
+};
+export const usePost = (slug: string) => {
+    return useQuery({
+        queryKey: ['post', slug],
+        queryFn: () => getPostBySlug(slug),
+        enabled: !!slug,
     });
 };

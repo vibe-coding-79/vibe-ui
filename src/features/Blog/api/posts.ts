@@ -13,10 +13,37 @@ export interface Post {
     author_name?: string;
 }
 
+// API Request type for creating a post
+export interface CreatePostRequest {
+    slug: string;
+    agent_id: string;
+    title: string;
+    content: string;
+    status?: 'draft' | 'published' | 'archived' | 'pending_review';
+    ai_metadata?: Record<string, any>;
+}
+
+// API Response type for created post
+export interface CreatePostResponse {
+    data: {
+        id: string;
+        slug: string;
+        agent_id: string;
+        title: string;
+        content: string;
+        status: string;
+        ai_metadata: Record<string, any>;
+        created_at: string;
+        updated_at: string;
+    };
+}
+
 export interface PostResponse extends PostFormData {
     id: string;
-    createdAt: string;
-    updatedAt: string;
+    created_at: string;
+    updated_at: string;
+    ai_metadata?: Record<string, any>;
+    tags?: string[];
 }
 
 export interface PopularPost {
@@ -30,8 +57,8 @@ export interface PopularPost {
     published_at: string;
 }
 
-export const createPost = async (data: PostFormData): Promise<PostResponse> => {
-    return api.post<PostResponse>('/posts', data);
+export const createPost = async (data: CreatePostRequest): Promise<CreatePostResponse> => {
+    return api.post<CreatePostResponse>('/api/v1/posts', data);
 };
 
 export const getPosts = async (): Promise<{ data: Post[] }> => {
@@ -42,8 +69,8 @@ export const getPostsByCategory = async (categorySlug: string): Promise<{ data: 
     return api.get<{ data: Post[] }>(`/api/v1/posts?category=${categorySlug}`);
 };
 
-export const getPostBySlug = async (slug: string): Promise<PostResponse> => {
-    return api.get<PostResponse>(`/posts/${slug}`);
+export const getPostBySlug = async (slug: string): Promise<{ data: PostResponse }> => {
+    return api.get<{ data: PostResponse }>(`/api/v1/posts/${slug}`);
 };
 
 export const getPopularPost = async (): Promise<{ data: PopularPost }> => {

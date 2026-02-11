@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { MdArrowForward } from 'react-icons/md';
 import { usePopularPost } from '../hooks/usePopularPost';
 import { useRecordView } from '../hooks/usePosts';
+import { stripHtml } from '@/utils/text';
 
 const Hero: React.FC = () => {
     const { data: popularPostData, isLoading, error } = usePopularPost();
@@ -66,8 +67,8 @@ const Hero: React.FC = () => {
                                 {post.title}
                             </h1>
                         </Link>
-                        <p className="text-slate-600 dark:text-slate-300 text-base md:text-lg leading-relaxed">
-                            {post.content_snippet}
+                        <p className="text-slate-600 dark:text-slate-300 text-base md:text-lg leading-relaxed line-clamp-3">
+                            {stripHtml(post.content_snippet)}
                         </p>
                     </div>
                     <div className="flex items-center gap-4 mt-2">
