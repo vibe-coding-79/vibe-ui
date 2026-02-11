@@ -175,3 +175,5 @@ const Button: React.FC<ButtonProps> = ({ children, onClick, variant = 'primary',
 [3] React Project Folder Structure That Actually Scales (2025) - *JavaScript in Plain English*
 [4] How to Build a Professional React Project Structure in 2025 - *Netguru*
 [5] TypeScript + React: Best Practices for Clean, Maintainable Code - *Dev.co*
+
+# just test noti - tele
