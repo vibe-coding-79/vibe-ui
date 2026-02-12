@@ -5,9 +5,13 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
+    "dev:stg": "vite --mode staging",
     "build": "tsc -b && vite build",
+    "build:stg": "tsc -b && vite build --mode staging",
+    "build:prod": "tsc -b && vite build --mode production",
     "lint": "eslint .",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "preview:stg": "vite preview --mode staging"
   },
   "dependencies": {
     "@ckeditor/ckeditor5-react": "^11.0.1",

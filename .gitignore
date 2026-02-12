@@ -24,3 +24,11 @@ dist-ssr
 *.sw?
 .claude
 .shared
+
+# Environment files
+.env
+.env.development
+.env.staging
+.env.production
+.env*.local
+!.env.example
