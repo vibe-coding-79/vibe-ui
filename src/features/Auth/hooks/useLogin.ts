@@ -1,6 +1,6 @@
 import { useMutation } from '@tanstack/react-query';
 import { authenticate, getProfile } from '../api/auth';
-import type { LoginPayload, ApiUser } from '../api/auth';
+import type { LoginPayload } from '../api/auth';
 import type { User } from '../types';
 import { useAuth } from '../context/AuthContext';
 import { useNavigate, useLocation } from 'react-router-dom';
