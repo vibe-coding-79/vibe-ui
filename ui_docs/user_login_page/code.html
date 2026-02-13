@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>BlogSpace - Login</title>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#137fec",
+                        "background-light": "#f6f7f8",
+                        "background-dark": "#101922",
+                    },
+                    fontFamily: {
+                        "display": ["Inter", "sans-serif"]
+                    },
+                    borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        /* Custom scrollbar for cleaner look */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8;
+        }
+    </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark text-[#0d141b] dark:text-white transition-colors duration-200">
+<div class="relative flex min-h-screen w-full flex-col overflow-x-hidden font-display">
+<!-- Navigation -->
+<header class="flex items-center justify-between whitespace-nowrap border-b border-solid border-b-[#e7edf3] dark:border-b-[#2a3845] px-6 lg:px-10 py-3 bg-white dark:bg-[#1A2633] transition-colors">
+<div class="flex items-center gap-4 text-[#0d141b] dark:text-white">
+<div class="size-8 flex items-center justify-center text-primary">
+<svg class="w-full h-full" fill="none" viewbox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
+<path d="M24 45.8096C19.6865 45.8096 15.4698 44.5305 11.8832 42.134C8.29667 39.7376 5.50128 36.3314 3.85056 32.3462C2.19985 28.361 1.76794 23.9758 2.60947 19.7452C3.451 15.5145 5.52816 11.6284 8.57829 8.5783C11.6284 5.52817 15.5145 3.45101 19.7452 2.60948C23.9758 1.76795 28.361 2.19986 32.3462 3.85057C36.3314 5.50129 39.7376 8.29668 42.134 11.8833C44.5305 15.4698 45.8096 19.6865 45.8096 24L24 24L24 45.8096Z" fill="currentColor"></path>
+</svg>
+</div>
+<h2 class="text-lg font-bold leading-tight tracking-[-0.015em]">BlogSpace</h2>
+</div>
+<div class="hidden md:flex flex-1 justify-end gap-8">
+<div class="flex items-center gap-9">
+<a class="text-sm font-medium leading-normal hover:text-primary transition-colors" href="#">Home</a>
+<a class="text-sm font-medium leading-normal hover:text-primary transition-colors" href="#">Features</a>
+<a class="text-sm font-medium leading-normal hover:text-primary transition-colors" href="#">Pricing</a>
+</div>
+<button class="flex min-w-[84px] cursor-pointer items-center justify-center overflow-hidden rounded-lg h-10 px-4 bg-primary text-white text-sm font-bold leading-normal tracking-[0.015em] hover:bg-blue-600 transition-colors shadow-sm">
+<span class="truncate">Sign Up</span>
+</button>
+</div>
+<!-- Mobile Menu Icon (Placeholder) -->
+<button class="md:hidden text-[#0d141b] dark:text-white">
+<span class="material-symbols-outlined">menu</span>
+</button>
+</header>
+<!-- Main Content -->
+<main class="flex-grow flex items-center justify-center p-4 py-12">
+<div class="layout-content-container flex flex-col w-full max-w-[480px]">
+<!-- Login Card -->
+<div class="bg-white dark:bg-[#1A2633] rounded-xl shadow-lg border border-[#e7edf3] dark:border-[#2a3845] p-6 sm:p-8 transition-colors">
+<!-- Heading -->
+<div class="flex flex-col gap-2 mb-8 text-center sm:text-left">
+<h1 class="text-[#0d141b] dark:text-white text-3xl sm:text-4xl font-black leading-tight tracking-[-0.033em]">Welcome back</h1>
+<p class="text-[#4c739a] dark:text-gray-400 text-base font-normal leading-normal">Please enter your details to sign in.</p>
+</div>
+<!-- Social Login -->
+<div class="flex flex-col gap-4">
+<button class="flex w-full cursor-pointer items-center justify-center overflow-hidden rounded-lg h-12 px-5 bg-white dark:bg-[#253240] border border-[#cfdbe7] dark:border-[#3a4b5c] text-[#0d141b] dark:text-white hover:bg-gray-50 dark:hover:bg-[#2d3d4d] transition-colors gap-3 text-base font-bold leading-normal tracking-[0.015em] group">
+<span class="material-symbols-outlined text-[#0d141b] dark:text-white group-hover:scale-110 transition-transform">account_circle</span>
+<span class="truncate">Sign in with Google</span>
+</button>
+</div>
+<!-- Divider -->
+<div class="relative py-6 flex items-center">
+<div class="flex-grow border-t border-[#e7edf3] dark:border-[#3a4b5c]"></div>
+<span class="flex-shrink-0 mx-4 text-[#4c739a] dark:text-gray-500 text-sm font-normal">Or continue with email</span>
+<div class="flex-grow border-t border-[#e7edf3] dark:border-[#3a4b5c]"></div>
+</div>
+<!-- Form -->
+<form action="#" class="flex flex-col gap-5">
+<!-- Email Input -->
+<div class="flex flex-col gap-2">
+<label class="text-[#0d141b] dark:text-gray-200 text-base font-medium leading-normal" for="email">Email</label>
+<input class="form-input flex w-full min-w-0 resize-none overflow-hidden rounded-lg text-[#0d141b] dark:text-white focus:outline-0 focus:ring-2 focus:ring-primary border border-[#cfdbe7] dark:border-[#3a4b5c] bg-[#f8fafc] dark:bg-[#253240] h-12 px-4 placeholder:text-[#4c739a] dark:placeholder:text-gray-500 text-base font-normal leading-normal transition-all" id="email" placeholder="Enter your email address" type="email" value=""/>
+</div>
+<!-- Password Input -->
+<div class="flex flex-col gap-2">
+<label class="text-[#0d141b] dark:text-gray-200 text-base font-medium leading-normal" for="password">Password</label>
+<input class="form-input flex w-full min-w-0 resize-none overflow-hidden rounded-lg text-[#0d141b] dark:text-white focus:outline-0 focus:ring-2 focus:ring-primary border border-[#cfdbe7] dark:border-[#3a4b5c] bg-[#f8fafc] dark:bg-[#253240] h-12 px-4 placeholder:text-[#4c739a] dark:placeholder:text-gray-500 text-base font-normal leading-normal transition-all" id="password" placeholder="Enter your password" type="password" value=""/>
+</div>
+<!-- Utilities Row -->
+<div class="flex flex-wrap items-center justify-between gap-3 mt-1">
+<label class="flex items-center gap-2 cursor-pointer">
+<input class="h-4 w-4 rounded border-[#cfdbe7] dark:border-[#3a4b5c] bg-white dark:bg-[#253240] text-primary focus:ring-primary/20 dark:focus:ring-offset-gray-800" type="checkbox"/>
+<span class="text-sm text-[#4c739a] dark:text-gray-400 font-medium">Remember me</span>
+</label>
+<a class="text-sm font-semibold text-primary hover:text-blue-600 transition-colors" href="#">Forgot Password?</a>
+</div>
+<!-- Submit Button -->
+<button class="flex w-full mt-2 cursor-pointer items-center justify-center overflow-hidden rounded-lg h-12 px-5 bg-primary text-slate-50 text-base font-bold leading-normal tracking-[0.015em] hover:bg-blue-600 transition-all shadow-md hover:shadow-lg active:scale-[0.98]" type="submit">
+<span class="truncate">Sign In</span>
+</button>
+</form>
+<!-- Footer Link -->
+<div class="mt-8 text-center">
+<p class="text-[#4c739a] dark:text-gray-400 text-sm font-normal">
+                            Don't have an account? 
+                            <a class="font-bold text-[#0d141b] dark:text-white hover:underline decoration-primary decoration-2 underline-offset-4 transition-all" href="#">Sign up</a>
+</p>
+</div>
+</div>
+<!-- Footer Simple -->
+<div class="mt-8 flex justify-center gap-6 text-[#4c739a] dark:text-gray-500">
+<a class="text-sm hover:text-primary transition-colors" href="#">Terms of Service</a>
+<a class="text-sm hover:text-primary transition-colors" href="#">Privacy Policy</a>
+</div>
+</div>
+</main>
+</div>
+</body></html>

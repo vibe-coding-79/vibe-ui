@@ -1,8 +1,18 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { MdSearch } from 'react-icons/md';
+import { useAuth } from '@/features/Auth/context/AuthContext';
+import { useLogout } from '@/features/Auth/hooks/useLogout';
 
 const Header: React.FC = () => {
+    const { isAuthenticated, user } = useAuth();
+    const logoutMutation = useLogout();
+    const location = useLocation();
+
+    const handleLogout = () => {
+        logoutMutation.mutate();
+    };
+
     return (
         <header className="sticky top-0 z-50 w-full bg-white dark:bg-[#1a2634] border-b border-[#e7edf3] dark:border-slate-700">
             <div className="px-4 md:px-10 lg:px-40 py-3 flex items-center justify-between gap-4">
@@ -38,9 +48,30 @@ const Header: React.FC = () => {
                         <button className="sm:hidden p-2 text-slate-700 dark:text-white">
                             <MdSearch size={24} />
                         </button>
-                        <button className="flex min-w-[84px] cursor-pointer items-center justify-center overflow-hidden rounded-lg h-10 px-4 bg-primary hover:bg-blue-600 transition-colors text-slate-50 text-sm font-bold leading-normal tracking-[0.015em]">
-                            <span className="truncate">Subscribe</span>
-                        </button>
+                        {isAuthenticated && user ? (
+                            <span className="hidden sm:block text-sm font-bold text-[#0d141b] dark:text-white mr-2">
+                                {user.name}
+                            </span>
+                        ) : (
+                            <></>
+                        )}
+                        {isAuthenticated ? (
+                            <button
+                                onClick={handleLogout}
+                                className="flex min-w-[84px] cursor-pointer items-center justify-center overflow-hidden rounded-lg h-10 px-4 bg-[#e7edf3] dark:bg-slate-700 hover:bg-[#dbe4ec] dark:hover:bg-slate-600 transition-colors text-[#0d141b] dark:text-white text-sm font-bold leading-normal tracking-[0.015em]"
+                                disabled={logoutMutation.isPending}
+                            >
+                                <span className="truncate">{logoutMutation.isPending ? '...' : 'Logout'}</span>
+                            </button>
+                        ) : (
+                            <Link
+                                to="/login"
+                                state={{ from: location }}
+                                className="flex min-w-[84px] cursor-pointer items-center justify-center overflow-hidden rounded-lg h-10 px-4 bg-[#e7edf3] dark:bg-slate-700 hover:bg-[#dbe4ec] dark:hover:bg-slate-600 transition-colors text-[#0d141b] dark:text-white text-sm font-bold leading-normal tracking-[0.015em]"
+                            >
+                                <span className="truncate">Login</span>
+                            </Link>
+                        )}
                     </div>
                 </div>
             </div>

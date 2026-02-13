@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import AdminLayout from '@/layouts/AdminLayout';
 
 const AdminDashboardPage: React.FC = () => {
@@ -16,10 +17,10 @@ const AdminDashboardPage: React.FC = () => {
                             <span className="material-symbols-outlined text-[20px] mr-2">download</span>
                             Export
                         </button>
-                        <button className="flex items-center justify-center h-10 px-4 rounded-lg bg-primary text-white font-medium hover:bg-primary/90 transition-colors shadow-sm shadow-primary/30">
+                        <Link to="/admin/posts/add" className="flex items-center justify-center h-10 px-4 rounded-lg bg-primary text-white font-medium hover:bg-primary/90 transition-colors shadow-sm shadow-primary/30">
                             <span className="material-symbols-outlined text-[20px] mr-2">add</span>
                             Add New Post
-                        </button>
+                        </Link>
                     </div>
                 </div>
 

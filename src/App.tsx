@@ -1,11 +1,14 @@
 import { RouterProvider } from 'react-router-dom';
 import { router } from '@/router';
 import { AuthProvider } from '@/features/Auth/context/AuthContext';
+import { PermissionProvider } from '@/features/Auth/context/PermissionContext';
 
 function App() {
   return (
     <AuthProvider>
-      <RouterProvider router={router} />
+      <PermissionProvider>
+        <RouterProvider router={router} />
+      </PermissionProvider>
     </AuthProvider>
   );
 }

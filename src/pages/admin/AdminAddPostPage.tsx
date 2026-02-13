@@ -1,10 +1,11 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import CKEditorComponent from '@/components/Editor/CKEditorComponent';
 import { postSchema } from '@/features/Blog/schemas/postSchema';
 import { useCreatePost } from '@/features/Blog/hooks/usePosts';
 import { useCategories } from '@/features/Blog/hooks/useCategories';
 import { getErrorMessage } from '@/utils/error-handler';
+import { validateImageFile, getPresignedUrl, uploadFileToS3 } from '@/features/Blog/api/upload';
 import type { CreatePostRequest } from '@/features/Blog/api/posts';
 import * as yup from 'yup';
 
@@ -23,6 +24,12 @@ const AdminAddPostPage: React.FC = () => {
     const [tagInput, setTagInput] = useState('');
     const [author, setAuthor] = useState('John Doe (You)');
     const [errors, setErrors] = useState<Record<string, string>>({});
+
+    const [imagePreview, setImagePreview] = useState<string | null>(null);
+    const [imagePath, setImagePath] = useState<string>('');
+    const [imageUploading, setImageUploading] = useState(false);
+    const [imageError, setImageError] = useState<string | null>(null);
+    const fileInputRef = useRef<HTMLInputElement>(null);
 
     // Auto-generate slug from title
     const generateSlug = (text: string): string => {
@@ -55,6 +62,43 @@ const AdminAddPostPage: React.FC = () => {
         setTags(tags.filter(tag => tag !== tagToRemove));
     };
 
+    const handleImageSelect = async (e: React.ChangeEvent<HTMLInputElement>) => {
+        const file = e.target.files?.[0];
+        if (!file) return;
+
+        const validationError = validateImageFile(file);
+        if (validationError) {
+            setImageError(validationError);
+            setImagePreview(null);
+            return;
+        }
+
+        setImageError(null);
+        setImagePreview(URL.createObjectURL(file));
+
+        try {
+            setImageUploading(true);
+            const presign = await getPresignedUrl(file.name, file.type);
+            await uploadFileToS3(presign.data.url, file);
+            setImagePath(presign.data.key);
+        } catch (err) {
+            setImageError(getErrorMessage(err));
+            setImagePreview(null);
+            setImagePath('');
+        } finally {
+            setImageUploading(false);
+        }
+    };
+
+    const handleRemoveImage = () => {
+        setImagePreview(null);
+        setImagePath('');
+        setImageError(null);
+        if (fileInputRef.current) {
+            fileInputRef.current.value = '';
+        }
+    };
+
     const createPostMutation = useCreatePost();
 
     const handlePublish = async () => {
@@ -77,9 +121,10 @@ const AdminAddPostPage: React.FC = () => {
             // Transform form data to API request format
             const apiData: CreatePostRequest = {
                 slug: slug || generateSlug(title),
-                agent_id: 'admin-agent', // TODO: Get from auth context or user profile
+                agent_id: 'admin-agent',
                 title: title,
                 content: content,
+                thumbnail: imagePath || undefined,
                 status: visibility === 'Public' ? 'published' : 'draft',
                 ai_metadata: {
                     category: selectedCategory?.name || '',
@@ -102,6 +147,7 @@ const AdminAddPostPage: React.FC = () => {
                     setPublishDate('');
                     setSelectedCategoryId('');
                     setTags([]);
+                    handleRemoveImage();
                 },
                 onError: (error) => {
                     const message = getErrorMessage(error);
@@ -277,19 +323,68 @@ const AdminAddPostPage: React.FC = () => {
                                 <h3 className="font-bold text-slate-900 dark:text-white">Featured Image</h3>
                             </div>
                             <div className="p-5">
-                                <div className="flex max-w-full flex-col items-center justify-center rounded-lg border-2 border-dashed border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-800/50 p-6 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors cursor-pointer group">
-                                    <div className="rounded-full bg-slate-200 dark:bg-slate-700 p-3 group-hover:scale-110 transition-transform">
-                                        <span className="material-symbols-outlined text-slate-500 dark:text-slate-400">
-                                            cloud_upload
-                                        </span>
+                                <input
+                                    ref={fileInputRef}
+                                    type="file"
+                                    accept="image/jpeg,image/png,image/gif,image/svg+xml,image/webp"
+                                    className="hidden"
+                                    onChange={handleImageSelect}
+                                />
+                                {imagePreview ? (
+                                    <div className="relative group">
+                                        <img
+                                            src={imagePreview}
+                                            alt="Featured preview"
+                                            className="w-full h-48 object-cover rounded-lg"
+                                        />
+                                        {imageUploading && (
+                                            <div className="absolute inset-0 bg-black/50 rounded-lg flex items-center justify-center">
+                                                <div className="flex flex-col items-center gap-2">
+                                                    <span className="animate-spin size-8 border-3 border-white border-t-transparent rounded-full"></span>
+                                                    <span className="text-white text-sm font-medium">Uploading...</span>
+                                                </div>
+                                            </div>
+                                        )}
+                                        {!imageUploading && (
+                                            <button
+                                                type="button"
+                                                onClick={handleRemoveImage}
+                                                className="absolute top-2 right-2 bg-red-500 hover:bg-red-600 text-white rounded-full p-1.5 opacity-0 group-hover:opacity-100 transition-opacity shadow-lg"
+                                            >
+                                                <span className="material-symbols-outlined text-[18px]">close</span>
+                                            </button>
+                                        )}
+                                        {imagePath && !imageUploading && (
+                                            <div className="absolute bottom-2 left-2 bg-green-500 text-white rounded-full px-2 py-0.5 text-xs font-medium flex items-center gap-1">
+                                                <span className="material-symbols-outlined text-[14px]">check_circle</span>
+                                                Uploaded
+                                            </div>
+                                        )}
                                     </div>
-                                    <p className="mt-2 text-sm font-medium text-slate-900 dark:text-white">
-                                        Click to upload
+                                ) : (
+                                    <div
+                                        onClick={() => fileInputRef.current?.click()}
+                                        className="flex max-w-full flex-col items-center justify-center rounded-lg border-2 border-dashed border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-800/50 p-6 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors cursor-pointer group"
+                                    >
+                                        <div className="rounded-full bg-slate-200 dark:bg-slate-700 p-3 group-hover:scale-110 transition-transform">
+                                            <span className="material-symbols-outlined text-slate-500 dark:text-slate-400">
+                                                cloud_upload
+                                            </span>
+                                        </div>
+                                        <p className="mt-2 text-sm font-medium text-slate-900 dark:text-white">
+                                            Click to upload
+                                        </p>
+                                        <p className="mt-1 text-xs text-slate-500 dark:text-slate-400">
+                                            SVG, PNG, JPG, GIF or WebP (max 8MB)
+                                        </p>
+                                    </div>
+                                )}
+                                {imageError && (
+                                    <p className="text-red-500 text-sm mt-2 flex items-center gap-1">
+                                        <span className="material-symbols-outlined text-[16px]">error</span>
+                                        {imageError}
                                     </p>
-                                    <p className="mt-1 text-xs text-slate-500 dark:text-slate-400">
-                                        SVG, PNG, JPG or GIF
-                                    </p>
-                                </div>
+                                )}
                             </div>
                         </div>
 

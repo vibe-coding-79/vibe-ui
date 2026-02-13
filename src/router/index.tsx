@@ -11,11 +11,16 @@ import AdminAddPostPage from '@/pages/admin/AdminAddPostPage';
 import RoleManagementPage from '@/pages/admin/RoleManagementPage';
 import CreateRolePage from '@/pages/admin/CreateRolePage';
 import NotFoundPage from '@/pages/NotFoundPage';
+import UserLoginPage from '@/pages/user/UserLoginPage';
 
 export const router = createBrowserRouter([
   {
     path: '/',
     element: <HomePage />,
+  },
+  {
+    path: '/login',
+    element: <UserLoginPage />,
   },
   {
     path: '/post/:slug',
@@ -33,7 +38,7 @@ export const router = createBrowserRouter([
     path: '/admin/dashboard',
     element: (
       <ProtectedRoute allowedRoles={['admin']}>
-      <AdminDashboardPage />
+        <AdminDashboardPage />
       </ProtectedRoute>
     ),
   },
@@ -41,7 +46,7 @@ export const router = createBrowserRouter([
     path: '/admin/posts',
     element: (
       <ProtectedRoute allowedRoles={['admin']}>
-      <AdminDashboardPage />
+        <AdminDashboardPage />
       </ProtectedRoute>
     ),
   },
@@ -49,7 +54,7 @@ export const router = createBrowserRouter([
     path: '/admin/posts/add',
     element: (
       <ProtectedRoute allowedRoles={['admin']}>
-      <AdminAddPostPage />
+        <AdminAddPostPage />
       </ProtectedRoute>
     ),
   },
@@ -57,7 +62,7 @@ export const router = createBrowserRouter([
     path: '/admin/posts/:id/edit',
     element: (
       <ProtectedRoute allowedRoles={['admin']}>
-      <AdminAddPostPage />
+        <AdminAddPostPage />
       </ProtectedRoute>
     ),
   },

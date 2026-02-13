@@ -33,6 +33,7 @@ export interface CreatePostRequest {
     agent_id: string;
     title: string;
     content: string;
+    thumbnail?: string;
     status?: 'draft' | 'published' | 'archived' | 'pending_review';
     ai_metadata?: Record<string, any>;
 }
