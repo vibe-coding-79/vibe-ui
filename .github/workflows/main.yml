@@ -55,6 +55,7 @@ jobs:
             Repository: ${{ github.repository }}
             Commit: ${{ github.sha }}
             Triggered by: ${{ github.actor }}
+            🌐 Website: http://blog-ui-prod.s3-website-us-east-1.amazonaws.com/
 
       - name: Notify Telegram on Failure
         if: failure()
