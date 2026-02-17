@@ -64,7 +64,7 @@ const ArticleGrid: React.FC = () => {
                         day: 'numeric',
                     });
 
-                    const imageUrl = post.thumbnail || post.image_url || `https://images.unsplash.com/photo-1498050108023-c5249f4df085?q=80&w=1000&auto=format&fit=crop`;
+                    const imageUrl = post.thumbnail ? `/${post.thumbnail}` : (post.image_url || `https://images.unsplash.com/photo-1498050108023-c5249f4df085?q=80&w=1000&auto=format&fit=crop`);
 
                     return (
                         <Link key={post.id} to={`/post/${post.slug}`} className="flex flex-col gap-3 group">
