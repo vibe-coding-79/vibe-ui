@@ -55,6 +55,7 @@ export interface CreatePostResponse {
 
 export interface PostResponse extends PostFormData {
     id: string;
+    thumbnail?: string;
     created_at: string;
     updated_at: string;
     ai_metadata?: Record<string, any>;

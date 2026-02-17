@@ -33,6 +33,7 @@ const PostDetailPage: React.FC = () => {
     const {
         title,
         content,
+        thumbnail,
         created_at,
         ai_metadata
     } = post;
@@ -92,19 +93,15 @@ const PostDetailPage: React.FC = () => {
                     </header>
 
                     {/* Hero Image - Placeholder or from metadata */}
-                    <div className="mb-10 overflow-hidden rounded-xl bg-gray-100 dark:bg-gray-800 aspect-video relative group">
-                        {ai_metadata?.image ? (
+                    {thumbnail && (
+                        <div className="mb-10 overflow-hidden rounded-xl bg-gray-100 dark:bg-gray-800 aspect-video relative group">
                             <img
                                 alt={title}
                                 className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
-                                src={ai_metadata.image}
+                                src={thumbnail}
                             />
-                        ) : (
-                            <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-blue-50 to-indigo-100 dark:from-slate-800 dark:to-slate-900">
-                                <span className="text-6xl">📝</span>
-                            </div>
-                        )}
-                    </div>
+                        </div>
+                    )}
 
                     {/* Article Body */}
                     <div className="prose prose-lg prose-slate dark:prose-invert max-w-none text-[#0d141b] dark:text-gray-200 leading-8">
