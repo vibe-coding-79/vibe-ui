@@ -16,13 +16,18 @@ import {
     ImageCaption,
     ImageStyle,
     ImageResize,
+    ImageUpload,
+    ImageInsert,
+    AutoImage,
     LinkImage,
     BlockQuote,
     Alignment,
-    CodeBlock
+    CodeBlock,
+    FileRepository
 } from 'ckeditor5';
 
 import 'ckeditor5/ckeditor5.css';
+import { S3UploadAdapterPlugin } from './CKEditorUploadAdapter';
 
 interface CKEditorComponentProps {
     initialData?: string;
@@ -39,11 +44,14 @@ const CKEditorComponent: React.FC<CKEditorComponentProps> = ({
         <CKEditor
             editor={ClassicEditor}
             config={{
+                extraPlugins: [S3UploadAdapterPlugin],
                 plugins: [
                     Essentials, Bold, Italic, Paragraph, Mention, Undo,
-                    Heading, List, CKLink, Image, ImageToolbar, ImageCaption,
-                    ImageStyle, ImageResize, LinkImage, BlockQuote, Alignment,
-                    CodeBlock
+                    Heading, List, CKLink,
+                    Image, ImageToolbar, ImageCaption, ImageStyle, ImageResize,
+                    ImageUpload, ImageInsert, AutoImage, LinkImage,
+                    FileRepository,
+                    BlockQuote, Alignment, CodeBlock
                 ],
                 toolbar: [
                     'undo', 'redo', '|',
@@ -73,8 +81,14 @@ const CKEditorComponent: React.FC<CKEditorComponentProps> = ({
                         'imageStyle:side',
                         '|',
                         'toggleImageCaption',
-                        'imageTextAlternative'
-                    ]
+                        'imageTextAlternative',
+                        '|',
+                        'resizeImage'
+                    ],
+                    insert: {
+                        type: 'auto',
+                        integrations: ['upload', 'url']
+                    }
                 },
                 mention: {
                     feeds: [
