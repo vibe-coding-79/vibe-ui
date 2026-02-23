@@ -23,6 +23,12 @@ importers:
       ckeditor5:
         specifier: ^47.3.0
         version: 47.4.0
+      dompurify:
+        specifier: ^3.3.1
+        version: 3.3.1
+      highlight.js:
+        specifier: ^11.11.1
+        version: 11.11.1
       react:
         specifier: ^19.2.0
         version: 19.2.3
@@ -45,6 +51,9 @@ importers:
       '@eslint/js':
         specifier: ^9.39.1
         version: 9.39.2
+      '@types/dompurify':
+        specifier: ^3.2.0
+        version: 3.2.0
       '@types/node':
         specifier: ^24.10.1
         version: 24.10.9
@@ -845,6 +854,10 @@ packages:
   '@types/debug@4.1.12':
     resolution: {integrity: sha512-vIChWdVG3LG1SMxEvI/AK+FWJthlrqlTu7fbrlywTkkaONwk/UAGaULXRlf8vkzFBLVm0zkMdCquhL5aOjhXPQ==}
 
+  '@types/dompurify@3.2.0':
+    resolution: {integrity: sha512-Fgg31wv9QbLDA0SpTOXO3MaxySc4DKGLi8sna4/Utjo4r3ZRPdCt4UQee8BWr+Q5z21yifghREPJGYaEOEIACg==}
+    deprecated: This is a stub types definition. dompurify provides its own type definitions, so you do not need this installed.
+
   '@types/estree@1.0.8':
     resolution: {integrity: sha512-dWHzHa2WqEXI/O1E9OjrocMTKJl2mSrEolh1Iomrv6U+JuNwaHXsXx9bLu5gG7BUWFIN0skIQJQ/L1rIex4X6w==}
 
@@ -870,6 +883,9 @@ packages:
 
   '@types/react@19.2.8':
     resolution: {integrity: sha512-3MbSL37jEchWZz2p2mjntRZtPt837ij10ApxKfgmXCTuHWagYg7iA5bqPw6C8BMPfwidlvfPI/fxOc42HLhcyg==}
+
+  '@types/trusted-types@2.0.7':
+    resolution: {integrity: sha512-ScaPdn1dQczgbl0QFTeTOmVHFULt394XJgOQNoyVhZ6r2vLnMLJfBPd53SB52T/3G36VI1/g2MZaX0cwDuXsfw==}
 
   '@types/unist@3.0.3':
     resolution: {integrity: sha512-ko/gIFJRv177XgZsZcBwnqJN5x/Gien8qNOn0D5bQU/zAzVf9Zt3BlcUiLqhV9y4ARk0GbT3tnUiPNgnTXzc/Q==}
@@ -1093,6 +1109,9 @@ packages:
 
   devlop@1.1.0:
     resolution: {integrity: sha512-RWmIqhcFf1lRYBvNmr7qTNuyCt/7/ns2jbpp1+PalgE/rDQcBT0fioSMUpJ93irlUhC5hrg4cYqe6U+0ImW0rA==}
+
+  dompurify@3.3.1:
+    resolution: {integrity: sha512-qkdCKzLNtrgPFP1Vo+98FRzJnBRGe4ffyCea9IwHB1fyxPOeNTHpLKYGd4Uk9xvNoH0ZoOjwZxNptyMwqrId1Q==}
 
   dunder-proto@1.0.1:
     resolution: {integrity: sha512-KIN/nDJBQRcXw0MLVhZE9iQHmG68qAVIBg9CqmUYjmQIhgij9U5MFvrqkUL5FbtyyzZuOeOt0zdeRe4UY7ct+A==}
@@ -1371,6 +1390,10 @@ packages:
 
   hermes-parser@0.25.1:
     resolution: {integrity: sha512-6pEjquH3rqaI6cYAXYPcz9MS4rY6R4ngRgrgfDshRptUZIc3lw0MCIJIGDj9++mfySOuPTHB4nrSW99BCvOPIA==}
+
+  highlight.js@11.11.1:
+    resolution: {integrity: sha512-Xwwo44whKBVCYoliBQwaPvtd/2tYFkRQtXDWj1nackaV2JPXx3L0+Jvd8/qCJ2p+ML0/XVkJ2q+Mr+UVdpJK5w==}
+    engines: {node: '>=12.0.0'}
 
   html-void-elements@3.0.0:
     resolution: {integrity: sha512-bEqo66MRXsUGxWHV5IP0PUiAWwoEjba4VCzg0LjFJBpchPaTfyfCKTG6bc5F8ucKec3q5y6qOdGyYTSBEvhCrg==}
@@ -2152,6 +2175,8 @@ snapshots:
       '@ckeditor/ckeditor5-core': 47.4.0
       '@ckeditor/ckeditor5-upload': 47.4.0
       ckeditor5: 47.4.0
+    transitivePeerDependencies:
+      - supports-color
 
   '@ckeditor/ckeditor5-alignment@47.4.0':
     dependencies:
@@ -2282,8 +2307,6 @@ snapshots:
       '@ckeditor/ckeditor5-utils': 47.4.0
       '@ckeditor/ckeditor5-watchdog': 47.4.0
       es-toolkit: 1.39.5
-    transitivePeerDependencies:
-      - supports-color
 
   '@ckeditor/ckeditor5-easy-image@47.4.0':
     dependencies:
@@ -2303,6 +2326,8 @@ snapshots:
       '@ckeditor/ckeditor5-utils': 47.4.0
       ckeditor5: 47.4.0
       es-toolkit: 1.39.5
+    transitivePeerDependencies:
+      - supports-color
 
   '@ckeditor/ckeditor5-editor-classic@47.4.0':
     dependencies:
@@ -2312,6 +2337,8 @@ snapshots:
       '@ckeditor/ckeditor5-utils': 47.4.0
       ckeditor5: 47.4.0
       es-toolkit: 1.39.5
+    transitivePeerDependencies:
+      - supports-color
 
   '@ckeditor/ckeditor5-editor-decoupled@47.4.0':
     dependencies:
@@ -2321,6 +2348,8 @@ snapshots:
       '@ckeditor/ckeditor5-utils': 47.4.0
       ckeditor5: 47.4.0
       es-toolkit: 1.39.5
+    transitivePeerDependencies:
+      - supports-color
 
   '@ckeditor/ckeditor5-editor-inline@47.4.0':
     dependencies:
@@ -2489,8 +2518,6 @@ snapshots:
       '@ckeditor/ckeditor5-widget': 47.4.0
       ckeditor5: 47.4.0
       es-toolkit: 1.39.5
-    transitivePeerDependencies:
-      - supports-color
 
   '@ckeditor/ckeditor5-indent@47.4.0':
     dependencies:
@@ -2531,8 +2558,6 @@ snapshots:
       '@ckeditor/ckeditor5-widget': 47.4.0
       ckeditor5: 47.4.0
       es-toolkit: 1.39.5
-    transitivePeerDependencies:
-      - supports-color
 
   '@ckeditor/ckeditor5-list@47.4.0':
     dependencies:
@@ -2546,8 +2571,6 @@ snapshots:
       '@ckeditor/ckeditor5-ui': 47.4.0
       '@ckeditor/ckeditor5-utils': 47.4.0
       ckeditor5: 47.4.0
-    transitivePeerDependencies:
-      - supports-color
 
   '@ckeditor/ckeditor5-markdown-gfm@47.4.0':
     dependencies:
@@ -2585,8 +2608,6 @@ snapshots:
       '@ckeditor/ckeditor5-utils': 47.4.0
       '@ckeditor/ckeditor5-widget': 47.4.0
       ckeditor5: 47.4.0
-    transitivePeerDependencies:
-      - supports-color
 
   '@ckeditor/ckeditor5-mention@47.4.0':
     dependencies:
@@ -2596,8 +2617,6 @@ snapshots:
       '@ckeditor/ckeditor5-utils': 47.4.0
       ckeditor5: 47.4.0
       es-toolkit: 1.39.5
-    transitivePeerDependencies:
-      - supports-color
 
   '@ckeditor/ckeditor5-minimap@47.4.0':
     dependencies:
@@ -2606,8 +2625,6 @@ snapshots:
       '@ckeditor/ckeditor5-ui': 47.4.0
       '@ckeditor/ckeditor5-utils': 47.4.0
       ckeditor5: 47.4.0
-    transitivePeerDependencies:
-      - supports-color
 
   '@ckeditor/ckeditor5-page-break@47.4.0':
     dependencies:
@@ -2617,8 +2634,6 @@ snapshots:
       '@ckeditor/ckeditor5-utils': 47.4.0
       '@ckeditor/ckeditor5-widget': 47.4.0
       ckeditor5: 47.4.0
-    transitivePeerDependencies:
-      - supports-color
 
   '@ckeditor/ckeditor5-paragraph@47.4.0':
     dependencies:
@@ -2673,8 +2688,6 @@ snapshots:
       '@ckeditor/ckeditor5-ui': 47.4.0
       '@ckeditor/ckeditor5-utils': 47.4.0
       ckeditor5: 47.4.0
-    transitivePeerDependencies:
-      - supports-color
 
   '@ckeditor/ckeditor5-source-editing@47.4.0':
     dependencies:
@@ -2705,8 +2718,6 @@ snapshots:
       '@ckeditor/ckeditor5-utils': 47.4.0
       ckeditor5: 47.4.0
       es-toolkit: 1.39.5
-    transitivePeerDependencies:
-      - supports-color
 
   '@ckeditor/ckeditor5-table@47.4.0':
     dependencies:
@@ -2719,8 +2730,6 @@ snapshots:
       '@ckeditor/ckeditor5-widget': 47.4.0
       ckeditor5: 47.4.0
       es-toolkit: 1.39.5
-    transitivePeerDependencies:
-      - supports-color
 
   '@ckeditor/ckeditor5-theme-lark@47.4.0':
     dependencies:
@@ -2745,8 +2754,6 @@ snapshots:
       color-parse: 2.0.2
       es-toolkit: 1.39.5
       vanilla-colorful: 0.7.2
-    transitivePeerDependencies:
-      - supports-color
 
   '@ckeditor/ckeditor5-undo@47.4.0':
     dependencies:
@@ -2765,8 +2772,6 @@ snapshots:
     dependencies:
       '@ckeditor/ckeditor5-ui': 47.4.0
       es-toolkit: 1.39.5
-    transitivePeerDependencies:
-      - supports-color
 
   '@ckeditor/ckeditor5-watchdog@47.4.0':
     dependencies:
@@ -2775,8 +2780,6 @@ snapshots:
       '@ckeditor/ckeditor5-engine': 47.4.0
       '@ckeditor/ckeditor5-utils': 47.4.0
       es-toolkit: 1.39.5
-    transitivePeerDependencies:
-      - supports-color
 
   '@ckeditor/ckeditor5-widget@47.4.0':
     dependencies:
@@ -2796,8 +2799,6 @@ snapshots:
       '@ckeditor/ckeditor5-utils': 47.4.0
       ckeditor5: 47.4.0
       es-toolkit: 1.39.5
-    transitivePeerDependencies:
-      - supports-color
 
   '@esbuild/aix-ppc64@0.27.2':
     optional: true
@@ -3138,6 +3139,10 @@ snapshots:
     dependencies:
       '@types/ms': 2.1.0
 
+  '@types/dompurify@3.2.0':
+    dependencies:
+      dompurify: 3.3.1
+
   '@types/estree@1.0.8': {}
 
   '@types/hast@3.0.4':
@@ -3163,6 +3168,9 @@ snapshots:
   '@types/react@19.2.8':
     dependencies:
       csstype: 3.2.3
+
+  '@types/trusted-types@2.0.7':
+    optional: true
 
   '@types/unist@3.0.3': {}
 
@@ -3468,6 +3476,10 @@ snapshots:
   devlop@1.1.0:
     dependencies:
       dequal: 2.0.3
+
+  dompurify@3.3.1:
+    optionalDependencies:
+      '@types/trusted-types': 2.0.7
 
   dunder-proto@1.0.1:
     dependencies:
@@ -3825,6 +3837,8 @@ snapshots:
   hermes-parser@0.25.1:
     dependencies:
       hermes-estree: 0.25.1
+
+  highlight.js@11.11.1: {}
 
   html-void-elements@3.0.0: {}
 

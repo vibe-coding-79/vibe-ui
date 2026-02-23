@@ -1,13 +1,264 @@
-import React from 'react';
+import React, { useEffect, useRef, useCallback } from 'react';
 import { useParams } from 'react-router-dom';
 import MainLayout from '@/layouts/MainLayout';
 import { usePost } from '@/features/Blog/hooks/usePosts';
+import DOMPurify from 'dompurify';
+import * as prettier from 'prettier/standalone';
+import prettierPluginBabel from 'prettier/plugins/babel';
+import prettierPluginEstree from 'prettier/plugins/estree';
+import prettierPluginHtml from 'prettier/plugins/html';
+import prettierPluginCss from 'prettier/plugins/postcss';
+import prettierPluginYaml from 'prettier/plugins/yaml';
+import prettierPluginTypescript from 'prettier/plugins/typescript';
+import hljs from 'highlight.js/lib/core';
+import javascript from 'highlight.js/lib/languages/javascript';
+import typescript from 'highlight.js/lib/languages/typescript';
+import python from 'highlight.js/lib/languages/python';
+import go from 'highlight.js/lib/languages/go';
+import java from 'highlight.js/lib/languages/java';
+import csharp from 'highlight.js/lib/languages/csharp';
+import php from 'highlight.js/lib/languages/php';
+import xml from 'highlight.js/lib/languages/xml';
+import css from 'highlight.js/lib/languages/css';
+import sql from 'highlight.js/lib/languages/sql';
+import bash from 'highlight.js/lib/languages/bash';
+import json from 'highlight.js/lib/languages/json';
+import ruby from 'highlight.js/lib/languages/ruby';
+import rust from 'highlight.js/lib/languages/rust';
+import yaml from 'highlight.js/lib/languages/yaml';
+import dockerfile from 'highlight.js/lib/languages/dockerfile';
+import 'highlight.js/styles/github-dark.min.css';
+
+// Register languages
+hljs.registerLanguage('javascript', javascript);
+hljs.registerLanguage('typescript', typescript);
+hljs.registerLanguage('python', python);
+hljs.registerLanguage('go', go);
+hljs.registerLanguage('java', java);
+hljs.registerLanguage('csharp', csharp);
+hljs.registerLanguage('php', php);
+hljs.registerLanguage('html', xml);
+hljs.registerLanguage('xml', xml);
+hljs.registerLanguage('css', css);
+hljs.registerLanguage('sql', sql);
+hljs.registerLanguage('bash', bash);
+hljs.registerLanguage('json', json);
+hljs.registerLanguage('ruby', ruby);
+hljs.registerLanguage('rust', rust);
+hljs.registerLanguage('yaml', yaml);
+hljs.registerLanguage('dockerfile', dockerfile);
+
+// Language display names mapping
+const languageNames: Record<string, string> = {
+    javascript: 'JavaScript',
+    typescript: 'TypeScript',
+    python: 'Python',
+    go: 'Go',
+    java: 'Java',
+    csharp: 'C#',
+    php: 'PHP',
+    html: 'HTML',
+    xml: 'XML',
+    css: 'CSS',
+    sql: 'SQL',
+    bash: 'Bash',
+    json: 'JSON',
+    ruby: 'Ruby',
+    rust: 'Rust',
+    yaml: 'YAML',
+    dockerfile: 'Dockerfile',
+    plaintext: 'Plain Text'
+};
+
+// Prettier parser mapping for supported languages
+const prettierParsers: Record<string, { parser: string; plugins: prettier.Plugin[] } | null> = {
+    javascript: { parser: 'babel', plugins: [prettierPluginBabel, prettierPluginEstree] },
+    typescript: { parser: 'typescript', plugins: [prettierPluginTypescript, prettierPluginEstree] },
+    json: { parser: 'json', plugins: [prettierPluginBabel, prettierPluginEstree] },
+    html: { parser: 'html', plugins: [prettierPluginHtml] },
+    css: { parser: 'css', plugins: [prettierPluginCss] },
+    yaml: { parser: 'yaml', plugins: [prettierPluginYaml] },
+    // Languages not supported by Prettier
+    python: null,
+    go: null,
+    java: null,
+    csharp: null,
+    php: null,
+    sql: null,
+    bash: null,
+    ruby: null,
+    rust: null,
+    dockerfile: null,
+    plaintext: null,
+    xml: null,
+};
+
+// Sanitize HTML to prevent XSS attacks
+const sanitizeHtml = (html: string): string => {
+    return DOMPurify.sanitize(html, {
+        ALLOWED_TAGS: [
+            'p', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6',
+            'strong', 'em', 'b', 'i', 'u', 's',
+            'a', 'ul', 'ol', 'li',
+            'pre', 'code', 'br', 'hr',
+            'blockquote', 'img',
+            'table', 'thead', 'tbody', 'tr', 'th', 'td',
+            'figure', 'figcaption', 'span', 'div'
+        ],
+        ALLOWED_ATTR: ['href', 'target', 'rel', 'class', 'src', 'alt', 'width', 'height', 'style'],
+    });
+};
 
 const PostDetailPage: React.FC = () => {
     const { slug } = useParams<{ slug: string }>();
     const { data: postData, isLoading, error } = usePost(slug || '');
+    const contentRef = useRef<HTMLDivElement>(null);
 
     const post = postData?.data;
+
+    // Copy code to clipboard
+    const handleCopyCode = useCallback(async (code: string, button: HTMLButtonElement) => {
+        try {
+            await navigator.clipboard.writeText(code);
+            button.textContent = 'Copied!';
+            button.classList.add('copied');
+            setTimeout(() => {
+                button.textContent = 'Copy';
+                button.classList.remove('copied');
+            }, 2000);
+        } catch {
+            button.textContent = 'Failed';
+            setTimeout(() => {
+                button.textContent = 'Copy';
+            }, 2000);
+        }
+    }, []);
+
+    // Format code using Prettier
+    const handleFormatCode = useCallback(async (
+        codeElement: HTMLElement,
+        language: string,
+        button: HTMLButtonElement
+    ) => {
+        const parserConfig = prettierParsers[language];
+        if (!parserConfig) {
+            button.textContent = 'N/A';
+            button.classList.add('unsupported');
+            setTimeout(() => {
+                button.textContent = 'Format';
+                button.classList.remove('unsupported');
+            }, 1500);
+            return;
+        }
+
+        const originalCode = codeElement.textContent || '';
+        button.textContent = 'Formatting...';
+        button.disabled = true;
+
+        try {
+            const formatted = await prettier.format(originalCode, {
+                parser: parserConfig.parser,
+                plugins: parserConfig.plugins,
+                tabWidth: 2,
+                semi: true,
+                singleQuote: true,
+            });
+
+            // Update the code element with formatted code
+            codeElement.textContent = formatted.trim();
+            // Re-apply syntax highlighting
+            hljs.highlightElement(codeElement);
+
+            button.textContent = 'Formatted!';
+            button.classList.add('formatted');
+            setTimeout(() => {
+                button.textContent = 'Format';
+                button.classList.remove('formatted');
+            }, 2000);
+        } catch {
+            button.textContent = 'Error';
+            setTimeout(() => {
+                button.textContent = 'Format';
+            }, 2000);
+        } finally {
+            button.disabled = false;
+        }
+    }, []);
+
+    // Apply syntax highlighting and add UI elements to code blocks
+    useEffect(() => {
+        if (!contentRef.current) return;
+
+        contentRef.current.querySelectorAll('pre').forEach((pre) => {
+            // Skip if already processed
+            if (pre.classList.contains('code-block-processed')) return;
+            pre.classList.add('code-block-processed');
+
+            const code = pre.querySelector('code');
+            if (!code) return;
+
+            // Get language from class
+            const classMatch = code.className.match(/language-(\w+)/);
+            const language = classMatch ? classMatch[1] : 'plaintext';
+            const displayName = languageNames[language] || language;
+
+            // Create wrapper
+            const wrapper = document.createElement('div');
+            wrapper.className = 'code-block-wrapper';
+
+            // Create header with language label and copy button
+            const header = document.createElement('div');
+            header.className = 'code-block-header';
+
+            const langLabel = document.createElement('span');
+            langLabel.className = 'code-block-language';
+            langLabel.textContent = displayName;
+
+            // Create button container
+            const buttonContainer = document.createElement('div');
+            buttonContainer.className = 'code-block-buttons';
+
+            // Format button
+            const formatButton = document.createElement('button');
+            formatButton.className = 'code-block-format';
+            formatButton.textContent = 'Format';
+            formatButton.type = 'button';
+            // Show format button only for supported languages
+            if (!prettierParsers[language]) {
+                formatButton.classList.add('hidden');
+            }
+
+            // Copy button
+            const copyButton = document.createElement('button');
+            copyButton.className = 'code-block-copy';
+            copyButton.textContent = 'Copy';
+            copyButton.type = 'button';
+
+            buttonContainer.appendChild(formatButton);
+            buttonContainer.appendChild(copyButton);
+
+            header.appendChild(langLabel);
+            header.appendChild(buttonContainer);
+
+            // Wrap the pre element
+            pre.parentNode?.insertBefore(wrapper, pre);
+            wrapper.appendChild(header);
+            wrapper.appendChild(pre);
+
+            // Add format event listener
+            formatButton.addEventListener('click', () => {
+                handleFormatCode(code, language, formatButton);
+            });
+
+            // Add copy event listener
+            copyButton.addEventListener('click', () => {
+                handleCopyCode(code.textContent || '', copyButton);
+            });
+
+            // Apply syntax highlighting
+            hljs.highlightElement(code);
+        });
+    }, [post?.content, handleCopyCode, handleFormatCode]);
 
     if (isLoading) {
         return (
@@ -104,9 +355,9 @@ const PostDetailPage: React.FC = () => {
                     )}
 
                     {/* Article Body */}
-                    <div className="prose prose-lg prose-slate dark:prose-invert max-w-none text-[#0d141b] dark:text-gray-200 leading-8">
+                    <div ref={contentRef} className="prose prose-lg prose-slate dark:prose-invert max-w-none text-[#0d141b] dark:text-gray-200 leading-8">
                         {isHtml(content) ? (
-                            <div dangerouslySetInnerHTML={{ __html: content }} />
+                            <div dangerouslySetInnerHTML={{ __html: sanitizeHtml(content) }} />
                         ) : (
                             <p className="whitespace-pre-wrap">{content}</p>
                         )}

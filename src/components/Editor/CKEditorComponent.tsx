@@ -23,6 +23,7 @@ import {
     BlockQuote,
     Alignment,
     CodeBlock,
+    Autoformat,
     FileRepository
 } from 'ckeditor5';
 
@@ -51,7 +52,7 @@ const CKEditorComponent: React.FC<CKEditorComponentProps> = ({
                     Image, ImageToolbar, ImageCaption, ImageStyle, ImageResize,
                     ImageUpload, ImageInsert, AutoImage, LinkImage,
                     FileRepository,
-                    BlockQuote, Alignment, CodeBlock
+                    BlockQuote, Alignment, CodeBlock, Autoformat
                 ],
                 toolbar: [
                     'undo', 'redo', '|',
@@ -63,14 +64,25 @@ const CKEditorComponent: React.FC<CKEditorComponentProps> = ({
                 ],
                 codeBlock: {
                     languages: [
-                        { language: 'plaintext', label: 'Plain text' },
-                        { language: 'csharp', label: 'C#' },
-                        { language: 'java', label: 'Java' },
-                        { language: 'php', label: 'PHP' },
+                        { language: 'plaintext', label: 'Plain text', class: '' },
                         { language: 'javascript', label: 'JavaScript' },
+                        { language: 'typescript', label: 'TypeScript' },
                         { language: 'python', label: 'Python' },
-                        { language: 'golang', label: 'Go' }
-                    ]
+                        { language: 'go', label: 'Go' },
+                        { language: 'java', label: 'Java' },
+                        { language: 'csharp', label: 'C#' },
+                        { language: 'php', label: 'PHP' },
+                        { language: 'html', label: 'HTML' },
+                        { language: 'css', label: 'CSS' },
+                        { language: 'sql', label: 'SQL' },
+                        { language: 'bash', label: 'Bash' },
+                        { language: 'json', label: 'JSON' },
+                        { language: 'ruby', label: 'Ruby' },
+                        { language: 'rust', label: 'Rust' },
+                        { language: 'yaml', label: 'YAML' },
+                        { language: 'dockerfile', label: 'Dockerfile' }
+                    ],
+                    indentSequence: '  '
                 },
                 licenseKey: 'GPL',
                 placeholder: placeholder,
