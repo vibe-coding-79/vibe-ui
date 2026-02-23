@@ -3,13 +3,6 @@ import { useParams } from 'react-router-dom';
 import MainLayout from '@/layouts/MainLayout';
 import { usePost } from '@/features/Blog/hooks/usePosts';
 import DOMPurify from 'dompurify';
-import * as prettier from 'prettier/standalone';
-import prettierPluginBabel from 'prettier/plugins/babel';
-import prettierPluginEstree from 'prettier/plugins/estree';
-import prettierPluginHtml from 'prettier/plugins/html';
-import prettierPluginCss from 'prettier/plugins/postcss';
-import prettierPluginYaml from 'prettier/plugins/yaml';
-import prettierPluginTypescript from 'prettier/plugins/typescript';
 import hljs from 'highlight.js/lib/core';
 import javascript from 'highlight.js/lib/languages/javascript';
 import typescript from 'highlight.js/lib/languages/typescript';
@@ -70,27 +63,59 @@ const languageNames: Record<string, string> = {
     plaintext: 'Plain Text'
 };
 
-// Prettier parser mapping for supported languages
-const prettierParsers: Record<string, { parser: string; plugins: prettier.Plugin[] } | null> = {
-    javascript: { parser: 'babel', plugins: [prettierPluginBabel, prettierPluginEstree] },
-    typescript: { parser: 'typescript', plugins: [prettierPluginTypescript, prettierPluginEstree] },
-    json: { parser: 'json', plugins: [prettierPluginBabel, prettierPluginEstree] },
-    html: { parser: 'html', plugins: [prettierPluginHtml] },
-    css: { parser: 'css', plugins: [prettierPluginCss] },
-    yaml: { parser: 'yaml', plugins: [prettierPluginYaml] },
-    // Languages not supported by Prettier
-    python: null,
-    go: null,
-    java: null,
-    csharp: null,
-    php: null,
-    sql: null,
-    bash: null,
-    ruby: null,
-    rust: null,
-    dockerfile: null,
-    plaintext: null,
-    xml: null,
+// Prettier supported languages (lazy-loaded)
+const prettierSupportedLanguages: Record<string, string> = {
+    javascript: 'babel',
+    typescript: 'typescript',
+    json: 'json',
+    html: 'html',
+    css: 'css',
+    yaml: 'yaml',
+};
+
+// Load Prettier and plugins on demand
+const loadPrettierForLanguage = async (language: string) => {
+    const parser = prettierSupportedLanguages[language];
+    if (!parser) return null;
+
+    const [prettier, estree] = await Promise.all([
+        import('prettier/standalone'),
+        import('prettier/plugins/estree'),
+    ]);
+
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    let plugins: any[] = [estree.default];
+
+    switch (parser) {
+        case 'babel':
+        case 'json': {
+            const babel = await import('prettier/plugins/babel');
+            plugins = [babel.default, estree.default];
+            break;
+        }
+        case 'typescript': {
+            const ts = await import('prettier/plugins/typescript');
+            plugins = [ts.default, estree.default];
+            break;
+        }
+        case 'html': {
+            const html = await import('prettier/plugins/html');
+            plugins = [html.default];
+            break;
+        }
+        case 'css': {
+            const css = await import('prettier/plugins/postcss');
+            plugins = [css.default];
+            break;
+        }
+        case 'yaml': {
+            const yaml = await import('prettier/plugins/yaml');
+            plugins = [yaml.default];
+            break;
+        }
+    }
+
+    return { prettier: prettier.default, parser, plugins };
 };
 
 // Sanitize HTML to prevent XSS attacks
@@ -134,14 +159,13 @@ const PostDetailPage: React.FC = () => {
         }
     }, []);
 
-    // Format code using Prettier
+    // Format code using Prettier (lazy-loaded)
     const handleFormatCode = useCallback(async (
         codeElement: HTMLElement,
         language: string,
         button: HTMLButtonElement
     ) => {
-        const parserConfig = prettierParsers[language];
-        if (!parserConfig) {
+        if (!prettierSupportedLanguages[language]) {
             button.textContent = 'N/A';
             button.classList.add('unsupported');
             setTimeout(() => {
@@ -152,13 +176,20 @@ const PostDetailPage: React.FC = () => {
         }
 
         const originalCode = codeElement.textContent || '';
-        button.textContent = 'Formatting...';
+        button.textContent = 'Loading...';
         button.disabled = true;
 
         try {
-            const formatted = await prettier.format(originalCode, {
-                parser: parserConfig.parser,
-                plugins: parserConfig.plugins,
+            const prettierModule = await loadPrettierForLanguage(language);
+            if (!prettierModule) {
+                throw new Error('Failed to load Prettier');
+            }
+
+            button.textContent = 'Formatting...';
+
+            const formatted = await prettierModule.prettier.format(originalCode, {
+                parser: prettierModule.parser,
+                plugins: prettierModule.plugins,
                 tabWidth: 2,
                 semi: true,
                 singleQuote: true,
@@ -224,7 +255,7 @@ const PostDetailPage: React.FC = () => {
             formatButton.textContent = 'Format';
             formatButton.type = 'button';
             // Show format button only for supported languages
-            if (!prettierParsers[language]) {
+            if (!prettierSupportedLanguages[language]) {
                 formatButton.classList.add('hidden');
             }
 
