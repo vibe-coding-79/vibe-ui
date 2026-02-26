@@ -24,7 +24,13 @@ import {
     Alignment,
     CodeBlock,
     Autoformat,
-    FileRepository
+    FileRepository,
+    Table,
+    TableToolbar,
+    TableColumnResize,
+    TableCaption,
+    TableCellProperties,
+    TableProperties
 } from 'ckeditor5';
 
 import 'ckeditor5/ckeditor5.css';
@@ -52,7 +58,9 @@ const CKEditorComponent: React.FC<CKEditorComponentProps> = ({
                     Image, ImageToolbar, ImageCaption, ImageStyle, ImageResize,
                     ImageUpload, ImageInsert, AutoImage, LinkImage,
                     FileRepository,
-                    BlockQuote, Alignment, CodeBlock, Autoformat
+                    BlockQuote, Alignment, CodeBlock, Autoformat,
+                    Table, TableToolbar, TableColumnResize, TableCaption,
+                    TableCellProperties, TableProperties
                 ],
                 toolbar: [
                     'undo', 'redo', '|',
@@ -60,8 +68,18 @@ const CKEditorComponent: React.FC<CKEditorComponentProps> = ({
                     'bold', 'italic', '|',
                     'link', 'insertImage', 'blockQuote', 'codeBlock', '|',
                     'bulletedList', 'numberedList', '|',
-                    'alignment',
+                    'alignment', '|',
+                    'insertTable',
                 ],
+                table: {
+                    contentToolbar: [
+                        'tableColumn', 'tableRow', 'mergeTableCells',
+                        '|',
+                        'tableCellProperties', 'tableProperties',
+                        '|',
+                        'toggleTableCaption'
+                    ]
+                },
                 codeBlock: {
                     languages: [
                         { language: 'plaintext', label: 'Plain text', class: '' },
