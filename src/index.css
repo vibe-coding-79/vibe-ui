@@ -262,6 +262,136 @@ body {
     display: none;
 }
 
+/* ============================================ */
+/* Table Styles - Post Content & CKEditor       */
+/* ============================================ */
+
+/* Frontend rendered tables inside .prose */
+.prose table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 1.5rem 0;
+    font-size: 0.95em;
+    border: 1px solid #e2e8f0;
+    border-radius: 0.5rem;
+    overflow: hidden;
+}
+
+.prose table thead {
+    background-color: #f1f5f9;
+}
+
+.prose table th,
+.prose table td {
+    padding: 0.6rem 1rem;
+    text-align: left;
+    border: 1px solid #e2e8f0;
+    vertical-align: top;
+}
+
+.prose table th {
+    font-weight: 600;
+    color: #0f172a;
+}
+
+.prose table tbody tr:nth-child(even) {
+    background-color: #f8fafc;
+}
+
+.prose table tbody tr:hover {
+    background-color: #f1f5f9;
+}
+
+/* Dark mode */
+.dark .prose table {
+    border-color: #334155;
+}
+
+.dark .prose table thead {
+    background-color: #1e293b;
+}
+
+.dark .prose table th,
+.dark .prose table td {
+    border-color: #334155;
+    color: #e2e8f0;
+}
+
+.dark .prose table th {
+    color: #f1f5f9;
+}
+
+.dark .prose table tbody tr:nth-child(even) {
+    background-color: #1a2632;
+}
+
+.dark .prose table tbody tr:hover {
+    background-color: #243447;
+}
+
+/* CKEditor editable area tables */
+.ck-editor__editable table {
+    border-collapse: collapse;
+    width: 100%;
+    margin: 1rem 0;
+}
+
+.ck-editor__editable table th,
+.ck-editor__editable table td {
+    border: 1px solid #cbd5e1;
+    padding: 0.5rem 0.75rem;
+}
+
+.ck-editor__editable table thead {
+    background-color: #f1f5f9;
+}
+
+.dark .ck-editor__editable table th,
+.dark .ck-editor__editable table td {
+    border-color: #334155;
+}
+
+.dark .ck-editor__editable table thead {
+    background-color: #1e293b;
+}
+
+/* ============================================ */
+/* List Styles - Post Content & CKEditor        */
+/* ============================================ */
+
+/* Frontend rendered lists inside .prose */
+.prose ul {
+    list-style-type: disc;
+    padding-left: 2em;
+    margin: 0.75rem 0;
+}
+
+.prose ol {
+    list-style-type: decimal;
+    padding-left: 2em;
+    margin: 0.75rem 0;
+}
+
+.prose li {
+    margin: 0.25rem 0;
+    padding-left: 0.25em;
+}
+
+/* Nested lists */
+.prose ul ul {
+    list-style-type: circle;
+    margin: 0.25rem 0;
+}
+
+.prose ul ul ul {
+    list-style-type: square;
+}
+
+.prose ol ol {
+    list-style-type: lower-alpha;
+    margin: 0.25rem 0;
+}
+
 /* Reset margins for pre inside wrapper */
 .code-block-wrapper pre {
     margin: 0 !important;
