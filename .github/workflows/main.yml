@@ -42,7 +42,7 @@ jobs:
 
       - name: Deploy to S3
         run: |
-          aws s3 sync dist s3://blog-ui-prod --delete
+          aws s3 sync dist s3://blog-ui-prod --delete --exclude "images/*"
 
       - name: Notify Telegram on Success
         if: success()
