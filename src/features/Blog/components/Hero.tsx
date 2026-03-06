@@ -64,7 +64,7 @@ const Hero: React.FC = () => {
                     </div>
                     <div className="flex flex-col gap-3 text-left">
                         <Link to={`/post/${post.slug}`}>
-                            <h1 className="text-[#0d141b] dark:text-white text-3xl md:text-4xl lg:text-5xl font-black leading-tight tracking-tight hover:text-primary transition-colors cursor-pointer">
+                            <h1 className="text-[#0d141b] dark:text-white text-2xl md:text-3xl lg:text-4xl font-black leading-tight tracking-tight hover:text-primary transition-colors cursor-pointer">
                                 {post.title}
                             </h1>
                         </Link>
